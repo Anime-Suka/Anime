@@ -1,0 +1,4529 @@
+<!DOCTYPE html>
+
+<html lang="id" class="dark">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Anime-Bodong Stream & Download Portal</title>
+
+    <!-- Tailwind CSS -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+
+        tailwind.config = {
+
+            darkMode: 'class',
+
+            theme: {
+
+                extend: {
+
+                    colors: {
+
+                        brand: {
+
+                            50: '#f0f9ff',
+
+                            100: '#e0f2fe',
+
+                            400: '#38bdf8',
+
+                            500: '#06b6d4',
+
+                            600: '#0284c7',
+
+                            900: '#0f172a',
+
+                            darker: '#0b0f19',
+
+                            card: '#161f30',
+
+                            accent: '#a855f7'
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+    <!-- FontAwesome Icons -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts Inter -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+
+        body { font-family: 'Inter', sans-serif; }
+
+        .glow-accent { box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); }
+
+        .glow-purple { box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
+
+        /* Custom Scrollbar */
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
+    </style>
+
+</head>
+
+<body class="bg-brand-darker text-slate-200 min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- NAVIGATION HEADER -->
+
+    <header class="sticky top-0 z-40 bg-brand-darker/90 backdrop-blur-md border-b border-slate-800/80">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="flex items-center justify-between h-16 gap-4">
+
+                
+
+                <!-- Logo & Brand -->
+
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('home')">
+
+                    <img src="https://play-lh.googleusercontent.com/ifePNjnpQ8ewEWGG1YDdDHakhY975S2dE2SUVGzSUAOiD1Q0xlWjCiW0zmHlUk_gucYQlI2IYTU7nuUb0doIwao" 
+
+                         alt="Logo" 
+
+                         class="w-10 h-10 rounded-xl object-cover shadow-lg glow-accent border border-cyan-500/30"
+
+                         onerror="this.src='https://placehold.co/100x100/161f30/38bdf8?text=AK'">
+
+                    <div>
+
+                        <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-500 bg-clip-text text-transparent">
+
+                            ANIME-BODONG
+
+                        </span>
+
+                        <span class="hidden sm:inline-block text-[10px] bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-1.5 py-0.5 rounded ml-2 font-semibold tracking-wide">STREAM & DOWNLOAD</span>
+
+                    </div>
+
+                </div>
+
+                <!-- Search Bar (Desktop) -->
+
+                <div class="hidden md:flex flex-1 max-w-md mx-4 relative">
+
+                    <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Cari anime, episode, genre..." 
+
+                        class="w-full bg-slate-900/80 border border-slate-700/80 rounded-full py-2 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
+
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400 text-sm"></i>
+
+                </div>
+
+                <!-- Navigation Controls -->
+
+                <div class="flex items-center gap-2 sm:gap-3">
+
+                    <button onclick="switchView('home')" class="p-2 sm:px-3 sm:py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition flex items-center gap-2 text-sm font-medium">
+
+                        <i class="fa-solid fa-house"></i>
+
+                        <span class="hidden sm:inline">Beranda</span>
+
+                    </button>
+
+                    <button onclick="switchView('playlists')" class="p-2 sm:px-3 sm:py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition flex items-center gap-2 text-sm font-medium">
+
+                        <i class="fa-solid fa-list-ul"></i>
+
+                        <span class="hidden sm:inline">Playlist Anime</span>
+
+                    </button>
+
+                    <button onclick="switchView('favorites')" class="p-2 sm:px-3 sm:py-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-amber-400 transition flex items-center gap-2 text-sm font-medium">
+
+                        <i class="fa-solid fa-bookmark text-amber-400"></i>
+
+                        <span class="hidden sm:inline">Favorit</span>
+
+                    </button>
+
+                    <!-- Upload Button (Only visible when logged in) -->
+
+                    <div id="uploadHeaderNav" class="hidden">
+
+                        <button onclick="switchView('upload')" class="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white transition flex items-center gap-2 text-sm font-semibold shadow-md shadow-cyan-950">
+
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                            <span class="hidden sm:inline">Kelola Admin</span>
+
+                        </button>
+
+                    </div>
+
+                    <!-- User Auth Button / Profile Header Bar -->
+
+                    <div id="userAuthHeaderNav">
+
+                        <button onclick="openModal('userAuthModal')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 transition flex items-center justify-center text-sm font-medium" title="Masuk">
+
+                            <i class="fa-solid fa-right-to-bracket"></i>
+
+                        </button>
+
+                    </div>
+
+                    <button onclick="openModal('guideModal')" class="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-purple-400 hover:text-purple-300 border border-purple-500/30 transition flex items-center gap-2 text-sm font-medium">
+
+                        <i class="fa-solid fa-server"></i>
+
+                        <span class="hidden sm:inline">Panduan</span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Mobile Search Bar -->
+
+            <div class="md:hidden pb-3 pt-1">
+
+                <div class="relative">
+
+                    <input type="text" id="searchInputMobile" onkeyup="handleSearch(true)" placeholder="Cari anime..." 
+
+                        class="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 pl-9 pr-4 text-sm text-slate-200 placeholder-slate-400 focus:outline-none focus:border-cyan-500">
+
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- MAIN CONTENT WRAPPER -->
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- VIEW 1: HOME PAGE / LISTING -->
+
+        <section id="view-home" class="space-y-6">
+
+            
+
+            <!-- Banner Informatif -->
+
+            <div class="bg-gradient-to-r from-slate-900 via-brand-card to-slate-900 border border-cyan-500/20 rounded-2xl p-4 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden">
+
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                <div class="space-y-1 text-center md:text-left z-10">
+
+                    <h1 class="text-xl sm:text-2xl font-bold text-white flex items-center justify-center md:justify-start gap-2">
+
+                        <span class="text-cyan-400">Selamat Datang di</span> Portal Streaming & Download
+
+                    </h1>
+
+                    <p class="text-xs sm:text-sm text-slate-400">Unduh anime dan video kualitas tinggi (480p & 720p) dengan pilihan mirror server terlengkap.</p>
+
+                </div>
+
+                <div class="flex items-center gap-2 z-10 flex-wrap justify-center">
+
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Server Online
+
+                    </span>
+
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/30">
+
+                        Fast Mirrors
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- Category Filter Bar -->
+
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-800/80 scrollbar-none" id="genreFilters">
+
+                <!-- Genre filter buttons dynamically generated -->
+
+            </div>
+
+            <!-- Section Title -->
+
+            <div class="flex items-center justify-between">
+
+                <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+
+                    <i class="fa-solid fa-fire text-cyan-400"></i> Rilisan Terbaru
+
+                </h2>
+
+                <span class="text-xs text-slate-400" id="itemCount">0 Video Tersedia</span>
+
+            </div>
+
+            <!-- Video Grid -->
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="videoGrid">
+
+                <!-- Dynamic Content Rendered Here -->
+
+            </div>
+
+            <!-- Empty State -->
+
+            <div id="emptyState" class="hidden text-center py-16 bg-slate-900/50 rounded-2xl border border-dashed border-slate-800">
+
+                <i class="fa-solid fa-film text-4xl text-slate-600 mb-3"></i>
+
+                <p class="text-slate-400 text-sm">Tidak ada video yang ditemukan.</p>
+
+            </div>
+
+        </section>
+
+        <!-- VIEW: PLAYLISTS / SERIES DIRECTORY -->
+
+        <section id="view-playlists" class="hidden space-y-6">
+
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+
+                <div>
+
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+
+                        <i class="fa-solid fa-list-ul text-cyan-400"></i> Daftar Playlist Series / Anime
+
+                    </h2>
+
+                    <p class="text-xs text-slate-400">Kumpulan serial anime lengkap yang dikelompokkan per judul dan episode.</p>
+
+                </div>
+
+                <span id="playlistCountBadge" class="text-xs bg-slate-800 text-cyan-400 border border-cyan-500/30 px-3 py-1 rounded-full font-semibold">0 Series</span>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="playlistCardGrid">
+
+                <!-- Playlists Rendered Dynamically -->
+
+            </div>
+
+        </section>
+
+        <!-- VIEW: FAVORITES / BOOKMARKS PAGE -->
+
+        <section id="view-favorites" class="hidden space-y-6">
+
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+
+                <div>
+
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+
+                        <i class="fa-solid fa-bookmark text-amber-400"></i> Anime Favorit Saya
+
+                    </h2>
+
+                    <p class="text-xs text-slate-400">Daftar anime yang tersimpan dalam koleksi favorit Anda.</p>
+
+                </div>
+
+                <span id="favCountBadge" class="text-xs bg-slate-800 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-full font-semibold">0 Tersimpan</span>
+
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="favoritesGrid">
+
+                <!-- Favorites Rendered Dynamically -->
+
+            </div>
+
+            <div id="emptyFavorites" class="hidden text-center py-16 bg-slate-900/50 rounded-2xl border border-dashed border-slate-800">
+
+                <i class="fa-solid fa-bookmark text-4xl text-slate-600 mb-3"></i>
+
+                <p class="text-slate-400 text-sm">Belum ada video favorit yang disimpan.</p>
+
+            </div>
+
+        </section>
+
+        <!-- VIEW 2: VIDEO DETAIL PAGE & PLAYLIST EPISODE SELECTOR -->
+
+        <section id="view-detail" class="hidden space-y-6">
+
+            
+
+            <!-- Breadcrumb Navigation -->
+
+            <div class="flex items-center gap-2 text-xs text-slate-400">
+
+                <button onclick="switchView('home')" class="hover:text-cyan-400"><i class="fa-solid fa-house"></i> Beranda</button>
+
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+
+                <button onclick="switchView('playlists')" class="hover:text-cyan-400">Playlist</button>
+
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+
+                <span id="detailBreadcrumbTitle" class="text-slate-200 font-medium truncate">Detail Video</span>
+
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- Left Sidebar Metadata Info & Synopsis (Informasi Utama Diletakkan di Atas/Kiri) -->
+
+                <div class="space-y-6">
+
+                    <div class="bg-brand-card p-4 rounded-xl border border-slate-800 space-y-4">
+
+                        <img id="detailThumbnail" src="https://placehold.co/400x600" alt="Poster" class="w-full aspect-[3/4] object-cover rounded-lg border border-slate-700">
+
+                        
+
+                        <div class="space-y-2 text-xs">
+
+                            <div class="flex justify-between py-1 border-b border-slate-800">
+
+                                <span class="text-slate-400">Series Playlist</span>
+
+                                <span id="detailSeriesName" class="text-purple-400 font-semibold truncate max-w-[150px]">Default Series</span>
+
+                            </div>
+
+                            <div class="flex justify-between py-1 border-b border-slate-800">
+
+                                <span class="text-slate-400">Genre</span>
+
+                                <span id="detailGenre" class="text-cyan-400 font-semibold">Action</span>
+
+                            </div>
+
+                            <div class="flex justify-between py-1 border-b border-slate-800">
+
+                                <span class="text-slate-400">Durasi</span>
+
+                                <span id="detailDuration" class="text-slate-200">24 Menit</span>
+
+                            </div>
+
+                            <div class="flex justify-between py-1 border-b border-slate-800">
+
+                                <span class="text-slate-400">Total Episode</span>
+
+                                <span id="detailTotalEps" class="text-slate-200">12 Episode</span>
+
+                            </div>
+
+                            <div class="flex justify-between py-1 border-b border-slate-800">
+
+                                <span class="text-slate-400">Studio</span>
+
+                                <span id="detailStudio" class="text-slate-200">Anime Studio</span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Info file video hasil upload (dibaca otomatis dari file) -->
+
+                        <div id="detailFileInfo" class="hidden space-y-2 text-xs border-t border-slate-800 pt-3">
+
+                            <p class="text-[11px] font-bold text-cyan-400 uppercase tracking-wide">Info File Video</p>
+
+                            <div class="space-y-2">
+
+                                <div class="flex justify-between py-1 border-b border-slate-800/70">
+
+                                    <span class="text-slate-400">Resolusi</span>
+
+                                    <span id="detailResolution" class="text-slate-200 font-mono">-</span>
+
+                                </div>
+
+                                <div class="flex justify-between py-1 border-b border-slate-800/70">
+
+                                    <span class="text-slate-400">Ukuran File</span>
+
+                                    <span id="detailFileSize" class="text-slate-200 font-mono">-</span>
+
+                                </div>
+
+                                <div class="flex justify-between py-1 border-b border-slate-800/70">
+
+                                    <span class="text-slate-400">Format</span>
+
+                                    <span id="detailFormat" class="text-slate-200">-</span>
+
+                                </div>
+
+                                <div class="flex justify-between py-1">
+
+                                    <span class="text-slate-400">Bitrate</span>
+
+                                    <span id="detailBitrate" class="text-slate-200 font-mono">-</span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="space-y-1">
+
+                            <h4 class="text-xs font-bold text-slate-300">Sinopsis:</h4>
+
+                            <p id="detailSynopsis" class="text-xs text-slate-400 leading-relaxed">
+
+                                Deskripsi dan sinopsis lengkap mengenai anime ini...
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Main Content (Video Player, Playlist Episode, Download Links & Diskusi diletakkan Setelah Sinopsis) -->
+
+                <div class="lg:col-span-2 space-y-6">
+
+                    
+
+                    <!-- Video Title Header -->
+
+                    <div class="bg-brand-card p-4 sm:p-5 rounded-xl border border-slate-800 space-y-2 relative">
+
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+
+                            <div class="flex flex-wrap items-center gap-2">
+
+                                <span id="detailBadgeEps" class="bg-cyan-500 text-slate-950 font-extrabold text-xs px-2.5 py-0.5 rounded">EPS 01</span>
+
+                                <span id="detailBadgeQuality" class="bg-purple-600 text-white font-bold text-xs px-2.5 py-0.5 rounded">720p HD</span>
+
+                                <span id="detailBadgeStatus" class="bg-emerald-500/20 text-emerald-400 text-xs px-2.5 py-0.5 rounded border border-emerald-500/30">Completed</span>
+
+                            </div>
+
+                            <button id="bookmarkBtn" onclick="toggleBookmark()" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 text-xs font-semibold transition flex items-center gap-1.5">
+
+                                <i class="fa-regular fa-bookmark" id="bookmarkIcon"></i> <span id="bookmarkText">Simpan Favorit</span>
+
+                            </button>
+
+                        </div>
+
+                        <h1 id="detailTitle" class="text-xl sm:text-2xl font-bold text-white tracking-wide">Judul Anime/Video</h1>
+
+                        <p class="text-xs text-slate-400">Dipublikasikan pada <span id="detailDate">2026-10-28</span> oleh <span id="detailUploader" class="text-cyan-400">Admin</span></p>
+
+                    </div>
+
+                    <!-- 1. Video Streaming Player Box -->
+
+                    <div class="bg-slate-950 rounded-xl overflow-hidden border border-slate-800 shadow-2xl relative">
+
+                        <div class="aspect-video w-full bg-black flex items-center justify-center relative">
+
+                            <iframe id="videoIframe" class="w-full h-full" src="about:blank" allowfullscreen></iframe>
+
+                            <video id="videoPlayer" class="w-full h-full hidden bg-black" controls playsinline preload="metadata"></video>
+
+                            <div id="playerNotice" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-2 bg-slate-950/90 text-center px-6">
+
+                                <i id="playerNoticeIcon" class="fa-solid fa-triangle-exclamation text-2xl text-amber-400"></i>
+
+                                <p id="playerNoticeText" class="text-xs text-slate-300">File video tersimpan tidak dapat dibuka.</p>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Player Controls Bar (Prev/Next Episode) -->
+
+                        <div class="p-3 bg-slate-900 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+
+                            <button id="prevEpsBtn" onclick="navigatePlaylist('prev')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold flex items-center gap-1.5 transition disabled:opacity-40 disabled:cursor-not-allowed">
+
+                                <i class="fa-solid fa-step-backward text-cyan-400"></i> Eps Sebelumnya
+
+                            </button>
+
+                            <span class="text-slate-400 font-mono text-[11px]" id="playlistProgressLabel">Episode 1 / 1</span>
+
+                            <button id="nextEpsBtn" onclick="navigatePlaylist('next')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold flex items-center gap-1.5 transition disabled:opacity-40 disabled:cursor-not-allowed">
+
+                                Eps Berikutnya <i class="fa-solid fa-step-forward text-cyan-400"></i>
+
+                            </button>
+
+                        </div>
+
+                        <!-- Server Switcher Bar -->
+
+                        <div class="p-3 bg-slate-900/60 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+
+                            <span class="text-slate-400 font-medium flex items-center gap-1.5">
+
+                                <i class="fa-solid fa-play text-cyan-400"></i> Server Mirror Player:
+
+                            </span>
+
+                            <div class="flex flex-wrap gap-2" id="streamServerBtns">
+
+                                <button class="px-2.5 py-1 rounded bg-cyan-500 text-slate-950 font-bold">Server Main HD</button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- 2. PLAYLIST EPISODE SELECTION BOX -->
+
+                    <div class="bg-brand-card p-4 sm:p-5 rounded-xl border border-slate-800 space-y-3">
+
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+
+                                <i class="fa-solid fa-list-ol text-cyan-400"></i> Daftar Episode (Playlist Series)
+
+                            </h3>
+
+                            <span id="playlistSeriesTitle" class="text-xs font-semibold text-purple-400">Series Title</span>
+
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2" id="playlistEpisodeContainer">
+
+                            <!-- Playlist Episode Buttons Generated Dynamically -->
+
+                        </div>
+
+                    </div>
+
+                    <!-- 3. DOWNLOAD LINKS BOX WITH BRAND LOGOS & MULTI-SERVER MATRIX -->
+
+                    <div class="bg-brand-card p-4 sm:p-5 rounded-xl border border-slate-800 space-y-4">
+
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+
+                            <div class="flex items-center gap-2">
+
+                                <i class="fa-solid fa-download text-cyan-400 text-lg"></i>
+
+                                <h3 class="text-base font-bold text-white">Download Links Video & Mirror Server</h3>
+
+                            </div>
+
+                            <span class="text-[11px] bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded font-semibold">Multi-Quality</span>
+
+                        </div>
+
+                        <div class="space-y-4" id="downloadLinksContainer">
+
+                            <!-- Download Matrix Rows Generated Dynamically -->
+
+                        </div>
+
+                    </div>
+
+                    <!-- 4. DISKUSI & KOMENTAR SECTION -->
+
+                    <div class="bg-brand-card p-4 sm:p-5 rounded-xl border border-slate-800 space-y-4">
+
+                        <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+
+                            <i class="fa-solid fa-comments text-purple-400"></i> Diskusi & Komentar
+
+                        </h3>
+
+                        <div class="space-y-2">
+
+                            <div class="flex flex-col sm:flex-row gap-2">
+
+                                <input type="text" id="commentAuthorInput" placeholder="Nama Kamu (contoh: Guest / Otaku32)" class="sm:w-1/3 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+
+                                <input type="text" id="commentInput" placeholder="Tulis komentar kamu..." class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+
+                                <button onclick="addComment()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 whitespace-nowrap">
+
+                                    <i class="fa-solid fa-paper-plane"></i> Kirim
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="space-y-2 pt-2" id="commentList">
+
+                            <!-- Comments Rendered Here -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- VIEW 3: UPLOAD & CONTENT MANAGEMENT PANEL (Accessible when Logged In) -->
+
+        <section id="view-upload" class="hidden space-y-6">
+
+            
+
+            <!-- Auth Barrier Notice if User not Logged in -->
+
+            <div id="uploadAuthBarrier" class="bg-slate-900 border border-amber-500/30 rounded-2xl p-6 text-center space-y-4 max-w-xl mx-auto my-8">
+
+                <div class="w-16 h-16 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center text-3xl mx-auto border border-amber-500/20">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                </div>
+
+                <div class="space-y-1">
+
+                    <h2 class="text-xl font-bold text-white">Login Diperlukan untuk Kelola Admin</h2>
+
+                    <p class="text-xs text-slate-400">Silakan masuk ke akun Admin Anda terlebih dahulu untuk mengakses panel ini.</p>
+
+                </div>
+
+                <div class="pt-2">
+
+                    <button onclick="openModal('userAuthModal')" class="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition flex items-center justify-center gap-2 text-sm shadow-lg shadow-cyan-950">
+
+                        <i class="fa-solid fa-right-to-bracket"></i> Masuk Akun Admin
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Upload Content (Visible when Logged in) -->
+
+            <div id="uploadUnlockedContent" class="hidden space-y-6">
+
+                <!-- Admin Dashboard Overview Cards -->
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+                    <div class="bg-brand-card p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-xs text-slate-400 font-medium">Total Video</p>
+
+                            <h3 id="statTotalVideos" class="text-2xl font-bold text-cyan-400">0</h3>
+
+                        </div>
+
+                        <div class="w-10 h-10 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-lg">
+
+                            <i class="fa-solid fa-film"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="bg-brand-card p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-xs text-slate-400 font-medium">Total Series</p>
+
+                            <h3 id="statTotalSeries" class="text-2xl font-bold text-purple-400">0</h3>
+
+                        </div>
+
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg">
+
+                            <i class="fa-solid fa-list-ul"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="bg-brand-card p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-xs text-slate-400 font-medium">Total Komentar</p>
+
+                            <h3 id="statTotalComments" class="text-2xl font-bold text-amber-400">0</h3>
+
+                        </div>
+
+                        <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg">
+
+                            <i class="fa-solid fa-comments"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Form Tambah Video & Tabel Management -->
+
+                <div class="bg-brand-card p-4 sm:p-6 rounded-2xl border border-slate-800 space-y-4">
+
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+
+                        <h2 id="formTitle" class="text-sm font-bold text-white flex items-center gap-2">
+
+                            <i class="fa-solid fa-plus-circle text-cyan-400"></i> Form Tambah Video / Episode Baru
+
+                        </h2>
+
+                        <button type="button" onclick="usePreviousFormat()" class="text-[11px] px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded transition">
+
+                            <i class="fa-solid fa-copy"></i> Salin Format Terakhir
+
+                        </button>
+
+                    </div>
+
+                    <form id="uploadForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+
+                        <input type="hidden" id="editItemId" value="">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+
+                            <div>
+
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Judul Video / Episode *</label>
+
+                                <input type="text" id="formTitleInput" required placeholder="Contoh: Solo Leveling S2 - Episode 05" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                            </div>
+
+                            <div>
+
+                                <label class="block text-xs font-semibold text-cyan-400 mb-1">Grup Seri / Playlist (Anime Title) *</label>
+
+                                <input type="text" id="formSeriesInput" required placeholder="Contoh: Solo Leveling Season 2" class="w-full bg-slate-900 border border-cyan-500/50 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                            </div>
+
+                            <div>
+
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Episode Badge / No *</label>
+
+                                <input type="text" id="formEpisodeInput" required placeholder="Contoh: Episode 05 atau Movie" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                            </div>
+
+                            <div>
+
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Genre Utama *</label>
+
+                                <div class="flex gap-2">
+
+                                    <select id="formGenreInput" onchange="toggleCustomGenreInput(this)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                                        <!-- Dynamic Options -->
+
+                                    </select>
+
+                                    <input type="text" id="customGenreInput" placeholder="Ketik Genre Baru..." class="hidden w-full bg-slate-900 border border-cyan-500 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none">
+
+                                </div>
+
+                            </div>
+
+                            <div>
+
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Kualitas Utama</label>
+
+                                <input type="text" id="formQualityInput" placeholder="Contoh: 720p HD" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                            </div>
+
+                            <div>
+
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Durasi</label>
+
+                                <input type="text" id="formDurationInput" placeholder="Contoh: 24 Menit" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                            </div>
+
+                            <div>
+
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Total Episode</label>
+
+                                <input type="text" id="formTotalEpsInput" placeholder="Contoh: 12 Episode atau 24 Eps" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                            </div>
+
+                            <div>
+
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Studio Animation</label>
+
+                                <input type="text" id="formStudioInput" placeholder="Contoh: A-1 Pictures, MAPPA" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                            </div>
+
+                            <div class="md:col-span-2">
+
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">URL Poster / Thumbnail (Gambar)</label>
+
+                                <input type="url" id="formThumbnailInput" placeholder="https://domain.com/poster.jpg (kosongkan = otomatis dari video)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                            </div>
+
+                        </div>
+
+                        <!-- Upload File Video (disimpan permanen di IndexedDB) -->
+
+                        <div class="border-t border-slate-800 pt-4 space-y-3">
+
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+
+                                <h3 class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
+
+                                    <i class="fa-solid fa-cloud-arrow-up"></i> Upload File Video (Tersimpan Permanen)
+
+                                </h3>
+
+                                <span id="storageStatusChip" class="text-[10px] px-2 py-0.5 rounded border border-slate-600/40 bg-slate-800 text-slate-400 font-semibold">Mengecek penyimpanan...</span>
+
+                            </div>
+
+                            <label for="formVideoFile" class="flex flex-col items-center justify-center gap-1 border-2 border-dashed border-slate-700 hover:border-cyan-500/60 bg-slate-950/60 rounded-xl p-4 cursor-pointer transition text-center">
+
+                                <i class="fa-solid fa-file-video text-2xl text-cyan-400"></i>
+
+                                <span class="text-xs font-semibold text-slate-200">Pilih file video (MP4 / WebM / MKV / MOV)</span>
+
+                                <span class="text-[10px] text-slate-500">File disimpan di penyimpanan browser — tetap tersedia setelah halaman di-reload.</span>
+
+                                <input type="file" id="formVideoFile" accept="video/*,.mkv" onchange="handleVideoFileChange(this)" class="hidden">
+
+                            </label>
+
+                            <div id="uploadFilePreview" class="hidden items-center gap-3 bg-slate-950 p-2.5 rounded-xl border border-cyan-500/30">
+
+                                <img id="uploadFileThumb" alt="Preview" class="w-16 h-20 object-cover rounded border border-slate-700 bg-slate-900" src="https://placehold.co/160x200/161f30/38bdf8?text=VIDEO">
+
+                                <div class="flex-1 min-w-0 text-xs">
+
+                                    <p id="uploadFileName" class="font-bold text-white truncate">nama-file.mp4</p>
+
+                                    <p id="uploadFileMeta" class="text-[10px] text-cyan-400 font-mono">0 MB</p>
+
+                                </div>
+
+                                <button type="button" onclick="clearSelectedVideoFile()" class="p-2 bg-slate-800 hover:bg-red-500 hover:text-white text-red-400 rounded-lg transition" title="Batalkan file">
+
+                                    <i class="fa-solid fa-xmark"></i>
+
+                                </button>
+
+                            </div>
+
+                            <div id="uploadProgressWrap" class="hidden space-y-1">
+
+                                <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+
+                                    <div id="uploadProgressBar" class="h-full w-0 bg-gradient-to-r from-cyan-500 to-purple-500 transition-all duration-150"></div>
+
+                                </div>
+
+                                <p id="uploadProgressText" class="text-[10px] text-cyan-400 font-mono">Menyimpan 0%</p>
+
+                            </div>
+
+                            <p class="text-[10px] text-slate-500">
+
+                                Uji dulu apakah browser mengizinkan penyimpanan permanen:
+
+                                <button type="button" onclick="runStorageSelfTest()" class="underline text-cyan-400 hover:text-cyan-300">Jalankan uji penyimpanan</button>
+
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">URL Video Streaming Embed (Iframe/Player) <span class="text-slate-500 font-normal">— opsional jika upload file</span></label>
+
+                            <input type="url" id="formEmbedInput" placeholder="https://www.youtube.com/embed/code atau embed link server" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                        </div>
+
+                        <div>
+
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Sinopsis Ringkas</label>
+
+                            <textarea id="formSynopsisInput" rows="3" placeholder="Tuliskan cerita singkat video..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none"></textarea>
+
+                        </div>
+
+                        <!-- Multi-Quality & Multi-Link Mirror Download Configuration -->
+
+                        <div class="border-t border-slate-800 pt-4 space-y-3">
+
+                            <div class="flex items-center justify-between">
+
+                                <h3 class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
+
+                                    <i class="fa-solid fa-server"></i> Konfigurasi Link Download Kualitas & Multi-Mirror Server
+
+                                </h3>
+
+                                <span class="text-[10px] text-purple-400 font-mono">Format: Nama Server:URL</span>
+
+                            </div>
+
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+
+                                Masukkan satu atau lebih link mirror server dipisahkan dengan koma (<code>,</code>).<br>
+
+                                Contoh: <code>Google Drive: https://drive.google.com/xyz, Mega: https://mega.nz/xyz, Telegram: https://t.me/xyz</code>
+
+                            </p>
+
+                            
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+
+                                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
+
+                                    <label class="block text-xs font-bold text-slate-300 flex items-center justify-between">
+
+                                        <span>Kualitas 480p (MP4)</span>
+
+                                        <span class="text-[10px] text-cyan-400 font-normal">Standard SD</span>
+
+                                    </label>
+
+                                    <input type="text" id="dl480p" placeholder="Pixeldrain:https://pixeldrain.com/u/1, Kraken:https://krakenfiles.com/1" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                                </div>
+
+                                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
+
+                                    <label class="block text-xs font-bold text-purple-400 flex items-center justify-between">
+
+                                        <span>Kualitas 720p (HD MP4)</span>
+
+                                        <span class="text-[10px] text-purple-300 font-normal">High Definition</span>
+
+                                    </label>
+
+                                    <input type="text" id="dl720p" placeholder="Google Drive:https://drive.google.com/file3, Mega:https://mega.nz/file3" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="pt-2 flex gap-3">
+
+                            <button type="submit" class="flex-1 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-extrabold rounded-xl transition shadow-lg shadow-cyan-950/50">
+
+                                Simpan & Terbitkan Video
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <!-- Existing Video List Management Table -->
+
+                <div class="bg-brand-card p-4 rounded-2xl border border-slate-800 space-y-4">
+
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+
+                        <h2 class="text-sm font-bold text-white">Daftar Konten Terdaftar</h2>
+
+                        <div class="flex flex-wrap items-center gap-2">
+
+                            <!-- Backup & Restore Buttons for Google Sites Embed -->
+
+                            <button type="button" onclick="exportDataJSON()" class="text-xs px-2.5 py-1 bg-cyan-600/20 hover:bg-cyan-600/40 text-cyan-300 border border-cyan-500/30 rounded transition flex items-center gap-1">
+
+                                <i class="fa-solid fa-download"></i> Ekspor Data (Backup)
+
+                            </button>
+
+                            <label class="text-xs px-2.5 py-1 bg-purple-600/20 hover:bg-purple-600/40 text-purple-300 border border-purple-500/30 rounded transition cursor-pointer flex items-center gap-1">
+
+                                <i class="fa-solid fa-upload"></i> Impor Data (Restore)
+
+                                <input type="file" id="importJsonInput" accept=".json" onchange="importDataJSON(event)" class="hidden">
+
+                            </label>
+
+                            <button onclick="resetDefaultData()" class="text-xs px-2.5 py-1 bg-red-500/10 text-red-400 border border-red-500/30 rounded hover:bg-red-500/20 transition">
+
+                                Reset Data Default
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="overflow-x-auto">
+
+                        <table class="w-full text-left text-xs text-slate-300">
+
+                            <thead class="bg-slate-900 text-slate-400 uppercase text-[10px]">
+
+                                <tr>
+
+                                    <th class="p-3">Cover</th>
+
+                                    <th class="p-3">Judul & Series</th>
+
+                                    <th class="p-3">Episode</th>
+
+                                    <th class="p-3">Genre</th>
+
+                                    <th class="p-3">File</th>
+
+                                    <th class="p-3">Aksi</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="userContentTableBody" class="divide-y divide-slate-800">
+
+                                <!-- Data Rows Generated Dynamically -->
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- TOAST NOTIFICATION FOR UNDO DELETION -->
+
+    <div id="deleteToast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+
+        <div class="bg-slate-900 border border-red-500/40 text-slate-200 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border-l-4 border-l-red-500">
+
+            <div class="text-red-400 text-lg">
+
+                <i class="fa-solid fa-trash-can"></i>
+
+            </div>
+
+            <div class="text-xs">
+
+                <p class="font-bold text-white" id="toastMessage">Video berhasil dihapus.</p>
+
+                <p class="text-[10px] text-slate-400">Klik tombol batal jika tidak sengaja.</p>
+
+            </div>
+
+            <button onclick="undoDeleteVideo()" class="ml-2 px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 text-xs font-bold border border-cyan-500/30 transition">
+
+                <i class="fa-solid fa-rotate-left"></i> Batal (Undo)
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- IN-PAGE TOAST & DIALOG (pengganti alert/confirm yang sering diblokir di iframe Google Sites) -->
+
+    <div id="toastStack" class="fixed bottom-5 left-1/2 -translate-x-1/2 sm:left-auto sm:right-5 sm:translate-x-0 z-[70] flex flex-col gap-2 items-stretch sm:items-end pointer-events-none w-[calc(100%-2rem)] sm:w-auto"></div>
+
+    <div id="appDialog" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[80] flex items-center justify-center p-4 hidden">
+
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-2xl">
+
+            <div class="flex items-start gap-3">
+
+                <div id="appDialogIcon" class="w-9 h-9 shrink-0 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/20">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                </div>
+
+                <div class="flex-1 min-w-0">
+
+                    <h3 id="appDialogTitle" class="text-sm font-bold text-white">Informasi</h3>
+
+                    <p id="appDialogMessage" class="text-xs text-slate-400 mt-1 whitespace-pre-line leading-relaxed"></p>
+
+                </div>
+
+            </div>
+
+            <div class="flex gap-2 pt-1">
+
+                <button id="appDialogCancel" type="button" class="hidden flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">Batal</button>
+
+                <button id="appDialogOk" type="button" class="flex-1 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition">OK</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CUSTOM DELETE CONFIRMATION MODAL -->
+
+    <div id="deleteConfirmModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+
+        <div class="bg-slate-900 border border-red-500/30 w-full max-w-md rounded-2xl p-6 space-y-4 shadow-2xl relative overflow-hidden">
+
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+
+                <div class="w-10 h-10 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl border border-red-500/20">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="text-base font-bold text-white">Konfirmasi Hapus Video</h3>
+
+                    <p class="text-[11px] text-slate-400">Tindakan ini tidak dapat dibatalkan secara permanen.</p>
+
+                </div>
+
+            </div>
+
+            <!-- Target Video Detail Preview -->
+
+            <div class="flex items-center gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800" id="deletePreviewCard">
+
+                <img id="deletePreviewThumb" src="" alt="Cover" class="w-12 h-16 object-cover rounded border border-slate-700">
+
+                <div class="space-y-1 overflow-hidden">
+
+                    <h4 id="deletePreviewTitle" class="text-xs font-bold text-white truncate">Judul Video</h4>
+
+                    <div class="flex items-center gap-2 text-[10px]">
+
+                        <span id="deletePreviewEps" class="bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded font-mono">EPS</span>
+
+                        <span id="deletePreviewGenre" class="text-slate-400">Genre</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <p class="text-xs text-slate-300">Apakah Anda yakin ingin menghapus episode/video ini dari database?</p>
+
+            <div class="flex gap-3 pt-2">
+
+                <button onclick="closeModal('deleteConfirmModal')" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition">
+
+                    Batal
+
+                </button>
+
+                <button id="confirmDeleteBtn" onclick="executeDeleteVideo()" class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition shadow-lg shadow-red-950 flex items-center justify-center gap-2">
+
+                    <i class="fa-solid fa-trash-can"></i> Ya, Hapus Video
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <footer class="bg-brand-darker border-t border-slate-800/80 py-8 mt-12">
+
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+
+            <div class="flex items-center justify-center gap-2">
+
+                <span class="text-lg font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">ANIME-BODONG PORTAL</span>
+
+            </div>
+
+            <p class="text-xs text-slate-500 max-w-xl mx-auto">
+
+                Website portal streaming dan tempat unduh video anime gratis berkualitas tinggi dengan integrasi multi server mirror tercepat.
+
+            </p>
+
+            <p class="text-[11px] text-slate-600">
+
+                &copy; 2026 Anime-Bodong Portal. Designed for Otaku Community.
+
+            </p>
+
+        </div>
+
+    </footer>
+
+    <!-- GUIDANCE MODAL -->
+
+    <div id="guideModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-2xl p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+
+                    <i class="fa-solid fa-server text-purple-400"></i> Panduan Setup Web Server & Hosting Video
+
+                </h3>
+
+                <button onclick="closeModal('guideModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+
+                    <h4 class="font-bold text-cyan-400 mb-1">1. Penyimpanan File Video & Lokasi CDN (Cloudflare IP India PoPs)</h4>
+
+                    <p>Untuk mengoptimalkan pengiriman video streaming dengan latensi sangat rendah, disarankan menggunakan routing **Cloudflare Edge PoPs India** (Mumbai - BOM, Chennai - MAA, atau New Delhi - DEL):</p>
+
+                    <ul class="list-disc list-inside mt-1 space-y-0.5 text-slate-400">
+
+                        <li><strong>Cloudflare Custom Host / Worker Proxy:</strong> Alihkan permintaan CDN video langsung melewati IP Edge Cloudflare kawasan India.</li>
+
+                        <li><strong>Cloudflare R2 Storage + India Edge Routing:</strong> Tanpa biaya bandwidth keluar (egress fees) dan terhubung langsung ke node terdekat.</li>
+
+                        <li><strong>Google Drive / Mega / Pixeldrain:</strong> Pilihan server mirror alternatif untuk unduhan publik.</li>
+
+                    </ul>
+
+                </div>
+
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+
+                    <h4 class="font-bold text-purple-400 mb-1">2. Pemasangan Backend (Node.js & Express)</h4>
+
+                    <p>Jalankan server sederhana menggunakan Node.js jika ingin menyimpan database link video secara tersentral:</p>
+
+                    <pre class="bg-slate-900 p-2 rounded text-[10px] font-mono text-cyan-300 mt-1 overflow-x-auto">npm install express cors dotenv multer</pre>
+
+                </div>
+
+            </div>
+
+            <button onclick="closeModal('guideModal')" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold">Tutup Panduan</button>
+
+        </div>
+
+    </div>
+
+    <!-- USER LOGIN MODAL -->
+
+    <div id="userAuthModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 space-y-5 shadow-2xl relative overflow-hidden">
+
+            <button onclick="closeModal('userAuthModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+            <!-- Modal Header -->
+
+            <div class="text-center space-y-1">
+
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl mx-auto border border-cyan-500/20 mb-2">
+
+                    <i class="fa-solid fa-user-astronaut"></i>
+
+                </div>
+
+                <h3 class="text-xl font-bold text-white">Masuk ke Akun</h3>
+
+                <p class="text-xs text-slate-400">Masuk untuk mengunggah video, menyimpan favorit, dan berkomentar.</p>
+
+            </div>
+
+            <!-- Login Form -->
+
+            <form id="userLoginForm" onsubmit="handleUserAuthSubmit(event, 'login')" class="space-y-3">
+
+                <div>
+
+                    <label class="block text-xs text-slate-400 mb-1">Email / ID</label>
+
+                    <input type="text" id="loginEmail" required placeholder="Masukkan ID / Email Anda" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                </div>
+
+                <div>
+
+                    <label class="block text-xs text-slate-400 mb-1">Kata Sandi</label>
+
+                    <input type="password" id="loginPassword" required placeholder="Masukkan Kata Sandi" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none">
+
+                </div>
+
+                <button type="submit" class="w-full py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg text-xs transition shadow-lg shadow-cyan-950">
+
+                    Masuk Akun
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- PERSISTENT STORAGE LAYER (localStorage + IndexedDB, aman untuk iframe embed Google Sites) -->
+
+    <script>
+
+        (function () {
+
+            'use strict';
+
+            const mem = new Map();
+
+            let lsOk = false;
+
+            try {
+
+                const probe = '__storage_probe__';
+
+                window.localStorage.setItem(probe, '1');
+
+                window.localStorage.removeItem(probe);
+
+                lsOk = true;
+
+            } catch (err) { lsOk = false; }
+
+            window.storageInfo = { localStorage: lsOk, indexedDB: false, mode: lsOk ? 'localStorage' : 'memory' };
+
+            window.safeGetItem = function (key) {
+
+                if (lsOk) { try { return window.localStorage.getItem(key); } catch (e) {} }
+
+                return mem.has(key) ? mem.get(key) : null;
+
+            };
+
+            window.safeSetItem = function (key, value) {
+
+                mem.set(key, value);
+
+                if (!lsOk) return false;
+
+                try { window.localStorage.setItem(key, value); return true; }
+
+                catch (e) { console.warn('[storage] localStorage write failed:', e); return false; }
+
+            };
+
+            window.safeRemoveItem = function (key) {
+
+                mem.delete(key);
+
+                if (lsOk) { try { window.localStorage.removeItem(key); } catch (e) {} }
+
+            };
+
+            const DB_NAME = 'anime_bodong_db';
+
+            const DB_VERSION = 1;
+
+            let dbPromise = null;
+
+            function openDB() {
+
+                if (!('indexedDB' in window)) return Promise.resolve(null);
+
+                if (dbPromise) return dbPromise;
+
+                dbPromise = new Promise(function (resolve) {
+
+                    let request;
+
+                    try {
+
+                        request = window.indexedDB.open(DB_NAME, DB_VERSION);
+
+                    } catch (err) {
+
+                        console.warn('[storage] IndexedDB diblokir:', err);
+
+                        return resolve(null);
+
+                    }
+
+                    request.onupgradeneeded = function () {
+
+                        const db = request.result;
+
+                        if (!db.objectStoreNames.contains('files')) db.createObjectStore('files');
+
+                        if (!db.objectStoreNames.contains('kv')) db.createObjectStore('kv');
+
+                    };
+
+                    request.onsuccess = function () {
+
+                        window.storageInfo.indexedDB = true;
+
+                        window.storageInfo.mode = lsOk ? 'localStorage + IndexedDB' : 'IndexedDB';
+
+                        resolve(request.result);
+
+                    };
+
+                    request.onerror = function () { resolve(null); };
+
+                    request.onblocked = function () { resolve(null); };
+
+                });
+
+                return dbPromise;
+
+            }
+
+            window.idbPut = async function (storeName, key, value) {
+
+                const db = await openDB();
+
+                if (!db) return false;
+
+                try {
+
+                    return await new Promise(function (resolve) {
+
+                        const tx = db.transaction(storeName, 'readwrite');
+
+                        tx.objectStore(storeName).put(value, key);
+
+                        tx.oncomplete = function () { resolve(true); };
+
+                        tx.onerror = function () { console.warn('[storage] tx error:', tx.error); resolve(false); };
+
+                        tx.onabort = function () { console.warn('[storage] tx abort:', tx.error); resolve(false); };
+
+                    });
+
+                } catch (err) { console.warn('[storage] put gagal:', err); return false; }
+
+            };
+
+            window.idbGet = async function (storeName, key) {
+
+                const db = await openDB();
+
+                if (!db) return null;
+
+                try {
+
+                    return await new Promise(function (resolve) {
+
+                        const tx = db.transaction(storeName, 'readonly');
+
+                        const req = tx.objectStore(storeName).get(key);
+
+                        req.onsuccess = function () { resolve(req.result === undefined ? null : req.result); };
+
+                        req.onerror = function () { resolve(null); };
+
+                    });
+
+                } catch (err) { return null; }
+
+            };
+
+            window.idbDelete = async function (storeName, key) {
+
+                const db = await openDB();
+
+                if (!db) return false;
+
+                try {
+
+                    return await new Promise(function (resolve) {
+
+                        const tx = db.transaction(storeName, 'readwrite');
+
+                        tx.objectStore(storeName).delete(key);
+
+                        tx.oncomplete = function () { resolve(true); };
+
+                        tx.onerror = function () { resolve(false); };
+
+                    });
+
+                } catch (err) { return false; }
+
+            };
+
+            window.idbClear = async function (storeName) {
+
+                const db = await openDB();
+
+                if (!db) return false;
+
+                try {
+
+                    return await new Promise(function (resolve) {
+
+                        const tx = db.transaction(storeName, 'readwrite');
+
+                        tx.objectStore(storeName).clear();
+
+                        tx.oncomplete = function () { resolve(true); };
+
+                        tx.onerror = function () { resolve(false); };
+
+                    });
+
+                } catch (err) { return false; }
+
+            };
+
+            window.blobToDataURL = function (blob) {
+
+                return new Promise(function (resolve) {
+
+                    const reader = new FileReader();
+
+                    reader.onload = function () { resolve(typeof reader.result === 'string' ? reader.result : null); };
+
+                    reader.onerror = function () { resolve(null); };
+
+                    reader.readAsDataURL(blob);
+
+                });
+
+            };
+
+        })();
+
+    </script>
+
+    <!-- ADMIN AUTH (sesi lokal, tanpa dependensi eksternal) -->
+
+    <script>
+
+        (function () {
+
+            const ADMIN_ID = 'user-admin.com';
+
+            const ADMIN_ALT_ID = 'admin';
+
+            const ADMIN_PASS = 'user-admin.com/12345';
+
+            const SESSION_KEY = 'anime_bodong_session';
+
+            window.currentUser = null;
+
+            // Handle ID/Email + Password Login (ONLY ADMIN CREDENTIALS ALLOWED)
+
+            window.handleUserAuthSubmit = function (e, type) {
+
+                if (e) e.preventDefault();
+
+                const emailOrId = document.getElementById('loginEmail').value.trim();
+
+                const pass = document.getElementById('loginPassword').value.trim();
+
+                if ((emailOrId === ADMIN_ID || emailOrId === ADMIN_ALT_ID) && pass === ADMIN_PASS) {
+
+                    const adminUser = {
+
+                        displayName: 'admin',
+
+                        email: ADMIN_ID,
+
+                        photoURL: 'https://api.dicebear.com/7.x/bottts/svg?seed=admin'
+
+                    };
+
+                    safeSetItem(SESSION_KEY, JSON.stringify(adminUser));
+
+                    updateUserUI(adminUser);
+
+                    closeModal('userAuthModal');
+
+                    const loginForm = document.getElementById('userLoginForm');
+
+                    if (loginForm) loginForm.reset();
+
+                    if (typeof switchView === 'function') switchView('upload');
+
+                    if (window.notify) notify('Berhasil masuk sebagai admin!', 'success');
+
+                } else {
+
+                    if (window.notify) notify('ID / Email atau Password salah! Akses hanya untuk kredensial admin khusus.', 'error');
+
+                }
+
+            };
+
+            // Update User UI & Toggle Upload Button Visibility
+
+            window.updateUserUI = function (user) {
+
+                window.currentUser = user;
+
+                const container = document.getElementById('userAuthHeaderNav');
+
+                const uploadHeaderBtn = document.getElementById('uploadHeaderNav');
+
+                const barrier = document.getElementById('uploadAuthBarrier');
+
+                const unlocked = document.getElementById('uploadUnlockedContent');
+
+                const uploaderDisp = document.getElementById('currentUploaderDisplay');
+
+                if (user) {
+
+                    const userName = user.displayName || user.email.split('@')[0];
+
+                    const avatar = user.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(userName)}`;
+
+                    container.innerHTML = `
+
+                        <div class="flex items-center gap-2 bg-slate-900 border border-slate-700/80 p-1 pl-2 pr-3 rounded-full">
+
+                            <img src="${avatar}" alt="Avatar" class="w-7 h-7 rounded-full bg-slate-800 border border-cyan-400 object-cover">
+
+                            <span class="text-xs font-bold text-slate-200 hidden sm:inline max-w-[100px] truncate">${userName}</span>
+
+                            <button onclick="logoutUser()" title="Keluar Akun" class="text-slate-400 hover:text-red-400 text-xs ml-1 transition">
+
+                                <i class="fa-solid fa-right-from-bracket"></i>
+
+                            </button>
+
+                        </div>
+
+                    `;
+
+                    if (uploadHeaderBtn) uploadHeaderBtn.classList.remove('hidden');
+
+                    if (barrier) barrier.classList.add('hidden');
+
+                    if (unlocked) unlocked.classList.remove('hidden');
+
+                    if (uploaderDisp) uploaderDisp.textContent = userName;
+
+                } else {
+
+                    container.innerHTML = `
+
+                        <button onclick="openModal('userAuthModal')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 transition flex items-center justify-center text-sm font-medium" title="Masuk">
+
+                            <i class="fa-solid fa-right-to-bracket"></i>
+
+                        </button>
+
+                    `;
+
+                    if (uploadHeaderBtn) uploadHeaderBtn.classList.add('hidden');
+
+                    if (barrier) barrier.classList.remove('hidden');
+
+                    if (unlocked) unlocked.classList.add('hidden');
+
+                }
+
+            };
+
+            window.logoutUser = function () {
+
+                safeRemoveItem(SESSION_KEY);
+
+                updateUserUI(null);
+
+                if (typeof switchView === 'function') switchView('home');
+
+            };
+
+            // Sesi admin tetap aktif setelah halaman di-reload
+
+            window.restoreAdminSession = function () {
+
+                const raw = safeGetItem(SESSION_KEY);
+
+                if (!raw) { updateUserUI(null); return; }
+
+                try {
+
+                    const user = JSON.parse(raw);
+
+                    if (user && (user.email === ADMIN_ID || user.displayName === 'admin')) updateUserUI(user);
+
+                    else updateUserUI(null);
+
+                } catch (err) { updateUserUI(null); }
+
+            };
+
+        })();
+
+    </script>
+
+    <!-- JAVASCRIPT LOGIC -->
+
+    <script>
+
+        // Preset default list of genres (Alphabetically sorted)
+
+        const PRESET_GENRES = [
+
+            'Action', 'Adventure', 'Comedy', 'Demons', 'Drama', 
+
+            'Ecchi', 'Fantasy', 'Game', 'Harem', 'Historical', 
+
+            'Horror', 'Isekai', 'Josei', 'Magic', 'Martial Arts', 
+
+            'Mecha', 'Military', 'Music', 'Mystery', 'Parody', 
+
+            'Psychological', 'Romance', 'Samurai', 'School', 'Sci-Fi', 
+
+            'Seinen', 'Shoujo', 'Shounen', 'Slice of Life', 'Sports', 
+
+            'Super Power', 'Supernatural', 'Thriller', 'Vampire'
+
+        ];
+
+        const initialData = [];
+
+        let videos = [];
+
+        let activeGenre = 'All';
+
+        let lastDeletedVideo = null;
+
+        let deleteTimeoutId = null;
+
+        let pendingDeleteId = null;
+
+        let pendingFile = null;
+
+        let playerRequestToken = 0;
+
+        let currentObjectUrl = null;
+
+        // Modal helper (dipakai tombol login, panduan, dan konfirmasi hapus)
+
+        window.openModal = function(id) {
+
+            const el = document.getElementById(id);
+
+            if (!el) return;
+
+            el.classList.remove('hidden');
+
+        };
+
+        window.closeModal = function(id) {
+
+            const el = document.getElementById(id);
+
+            if (!el) return;
+
+            el.classList.add('hidden');
+
+        };
+
+        // ===== TOAST & DIALOG IN-PAGE =====
+
+        const TOAST_TONES = {
+
+            success: { icon: 'fa-circle-check', color: 'text-emerald-400', border: 'border-emerald-500/40' },
+
+            error: { icon: 'fa-circle-exclamation', color: 'text-red-400', border: 'border-red-500/40' },
+
+            warning: { icon: 'fa-triangle-exclamation', color: 'text-amber-400', border: 'border-amber-500/40' },
+
+            info: { icon: 'fa-circle-info', color: 'text-cyan-400', border: 'border-cyan-500/40' }
+
+        };
+
+        window.notify = function(message, type) {
+
+            const stack = document.getElementById('toastStack');
+
+            if (!stack) return;
+
+            const tone = TOAST_TONES[type] || TOAST_TONES.info;
+
+            const el = document.createElement('div');
+
+            el.className = 'pointer-events-auto flex items-start gap-2.5 bg-slate-900 border border-l-4 rounded-xl px-3.5 py-3 shadow-2xl max-w-sm opacity-0 translate-y-2 transition-all duration-300 ' + tone.border;
+
+            const icon = document.createElement('i');
+
+            icon.className = 'fa-solid ' + tone.icon + ' ' + tone.color + ' mt-0.5';
+
+            const text = document.createElement('p');
+
+            text.className = 'text-xs text-slate-200 leading-relaxed whitespace-pre-line break-words';
+
+            text.textContent = message;
+
+            el.append(icon, text);
+
+            stack.appendChild(el);
+
+            requestAnimationFrame(() => el.classList.remove('opacity-0', 'translate-y-2'));
+
+            setTimeout(() => {
+
+                el.classList.add('opacity-0', 'translate-y-2');
+
+                setTimeout(() => el.remove(), 350);
+
+            }, 4500);
+
+        };
+
+        // Dialog in-page: resolve true (OK) / false (Batal)
+
+        window.showDialog = function(options) {
+
+            const opts = options || {};
+
+            return new Promise(function(resolve) {
+
+                const modal = document.getElementById('appDialog');
+
+                const iconBox = document.getElementById('appDialogIcon');
+
+                const titleEl = document.getElementById('appDialogTitle');
+
+                const msgEl = document.getElementById('appDialogMessage');
+
+                const okBtn = document.getElementById('appDialogOk');
+
+                const cancelBtn = document.getElementById('appDialogCancel');
+
+                if (!modal || !okBtn || !cancelBtn) { resolve(true); return; }
+
+                const isWarning = opts.type === 'warning' || opts.type === 'danger' || opts.type === 'error';
+
+                const isDanger = opts.type === 'danger' || opts.type === 'error';
+
+                const boxClass = isDanger
+
+                    ? 'bg-red-500/10 text-red-400 border-red-500/20'
+
+                    : isWarning ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20';
+
+                const btnClass = isDanger
+
+                    ? 'bg-red-600 hover:bg-red-500 text-white'
+
+                    : isWarning ? 'bg-amber-500 hover:bg-amber-400 text-slate-950' : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950';
+
+                const iconClass = isWarning ? 'fa-triangle-exclamation' : 'fa-circle-info';
+
+                iconBox.className = 'w-9 h-9 shrink-0 rounded-xl flex items-center justify-center border ' + boxClass;
+
+                iconBox.innerHTML = '<i class="fa-solid ' + iconClass + '"></i>';
+
+                titleEl.textContent = opts.title || 'Informasi';
+
+                msgEl.textContent = opts.message || '';
+
+                okBtn.textContent = opts.confirmText || 'OK';
+
+                okBtn.className = 'flex-1 py-2 rounded-lg font-bold text-xs transition ' + btnClass;
+
+                cancelBtn.textContent = opts.cancelText || 'Batal';
+
+                cancelBtn.classList.toggle('hidden', !opts.confirm);
+
+                const finish = function(result) {
+
+                    modal.classList.add('hidden');
+
+                    okBtn.onclick = null;
+
+                    cancelBtn.onclick = null;
+
+                    resolve(result);
+
+                };
+
+                okBtn.onclick = function() { finish(true); };
+
+                cancelBtn.onclick = function() { finish(false); };
+
+                cancelBtn.classList.remove('hidden');
+
+                if (!opts.confirm) cancelBtn.classList.add('hidden');
+
+                modal.classList.remove('hidden');
+
+            });
+
+        };
+
+        // Navigation Switcher
+
+        window.switchView = function(viewName) {
+
+            const views = ['home', 'playlists', 'favorites', 'detail', 'upload'];
+
+            views.forEach(v => {
+
+                const el = document.getElementById(`view-${v}`);
+
+                if (el) el.classList.add('hidden');
+
+            });
+
+            const target = document.getElementById(`view-${viewName}`);
+
+            if (target) {
+
+                target.classList.remove('hidden');
+
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (viewName === 'home') {
+
+                renderGrid();
+
+                renderGenres();
+
+            } else if (viewName === 'playlists') {
+
+                renderPlaylistDirectory();
+
+            } else if (viewName === 'favorites') {
+
+                renderFavorites();
+
+            } else if (viewName === 'upload') {
+
+                renderUserContentTable();
+
+                populateGenreDropdown();
+
+                updateAdminDashboardStats();
+
+                updateStorageStatusUI();
+
+            }
+
+        };
+
+        // Render Favorites List
+
+        window.renderFavorites = function() {
+
+            const grid = document.getElementById('favoritesGrid');
+
+            const empty = document.getElementById('emptyFavorites');
+
+            const badge = document.getElementById('favCountBadge');
+
+            if (!grid) return;
+
+            const bookmarks = JSON.parse(safeGetItem('user_bookmarks') || '[]');
+
+            const favItems = videos.filter(v => bookmarks.includes(v.id));
+
+            if (badge) badge.textContent = `${favItems.length} Tersimpan`;
+
+            if (favItems.length === 0) {
+
+                grid.innerHTML = '';
+
+                if (empty) empty.classList.remove('hidden');
+
+                return;
+
+            }
+
+            if (empty) empty.classList.add('hidden');
+
+            grid.innerHTML = favItems.map(item => `
+
+                <div onclick="openDetail('${item.id}')" class="group bg-brand-card border border-slate-800 hover:border-amber-500/50 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:-translate-y-1 cursor-pointer flex flex-col">
+
+                    <div class="relative aspect-[3/4] overflow-hidden bg-slate-950">
+
+                        <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/300x400/161f30/38bdf8?text=Anime'">
+
+                        <div class="absolute top-2 left-2 bg-slate-950/80 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-extrabold text-cyan-400 border border-cyan-500/30">
+
+                            ${item.episode || 'EPS'}
+
+                        </div>
+
+                    </div>
+
+                    <div class="p-3 flex-1 flex flex-col justify-between space-y-1">
+
+                        <div>
+
+                            <span class="text-[10px] text-slate-400 font-medium block truncate">${item.series || item.genre || 'Anime'}</span>
+
+                            <h3 class="text-xs font-bold text-slate-100 group-hover:text-amber-400 transition line-clamp-2 leading-snug">${item.title}</h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `).join('');
+
+        };
+
+        // Update Admin Dashboard Stats
+
+        function updateAdminDashboardStats() {
+
+            const totalVidEl = document.getElementById('statTotalVideos');
+
+            const totalSeriesEl = document.getElementById('statTotalSeries');
+
+            const totalCommentsEl = document.getElementById('statTotalComments');
+
+            if (totalVidEl) totalVidEl.textContent = videos.length;
+
+            
+
+            const seriesSet = new Set(videos.map(v => v.series || v.title));
+
+            if (totalSeriesEl) totalSeriesEl.textContent = seriesSet.size;
+
+            let commentCount = 0;
+
+            videos.forEach(v => {
+
+                if (v.comments && Array.isArray(v.comments)) {
+
+                    commentCount += v.comments.length;
+
+                }
+
+            });
+
+            if (totalCommentsEl) totalCommentsEl.textContent = commentCount;
+
+        }
+
+        // Refresh semua tampilan sekaligus setelah data berubah (upload / edit video)
+
+        function refreshAllViews() {
+
+            renderGenres();
+
+            renderGrid();
+
+            renderPlaylistDirectory();
+
+            renderFavorites();
+
+            renderUserContentTable();
+
+            updateAdminDashboardStats();
+
+            updateStorageStatusUI();
+
+            if (window.currentDetailItem) {
+
+                const fresh = videos.find(v => v.id === window.currentDetailItem.id);
+
+                if (fresh) {
+
+                    window.currentDetailItem = fresh;
+
+                    updateBookmarkButtonUI();
+
+                    renderComments(fresh);
+
+                    updateDetailFileInfo(fresh);
+
+                }
+
+            }
+
+        }
+
+        const VIDEO_STORAGE_KEY = 'anime_bodong_videos';
+
+        function parseStoredPayload(raw) {
+
+            if (!raw) return null;
+
+            try {
+
+                const parsed = JSON.parse(raw);
+
+                if (Array.isArray(parsed)) return { savedAt: 0, data: parsed };
+
+                if (parsed && Array.isArray(parsed.data)) return { savedAt: parsed.savedAt || 0, data: parsed.data };
+
+            } catch (e) {}
+
+            return null;
+
+        }
+
+        // Muat data dari localStorage + IndexedDB (ambil yang paling baru) agar tetap ada setelah reload
+
+        async function initData() {
+
+            const fromLS = parseStoredPayload(safeGetItem(VIDEO_STORAGE_KEY));
+
+            let fromIDB = null;
+
+            try { fromIDB = parseStoredPayload(await idbGet('kv', VIDEO_STORAGE_KEY)); } catch (e) {}
+
+            const newest = (fromIDB && (!fromLS || fromIDB.savedAt > fromLS.savedAt)) ? fromIDB : fromLS;
+
+            videos = newest ? newest.data : [...initialData];
+
+            saveData();
+
+            updateStorageStatusUI();
+
+        }
+
+        // Simpan ke dua lapis penyimpanan (localStorage + IndexedDB)
+
+        function saveData() {
+
+            const payload = JSON.stringify({ savedAt: Date.now(), data: videos });
+
+            safeSetItem(VIDEO_STORAGE_KEY, payload);
+
+            idbPut('kv', VIDEO_STORAGE_KEY, payload);
+
+            updateStorageStatusUI();
+
+        }
+
+        // Feature: Backup Data to Local JSON File
+
+        window.exportDataJSON = function() {
+
+            if (videos.length === 0) {
+
+                notify('Tidak ada data video untuk diekspor.', 'warning');
+
+                return;
+
+            }
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(videos, null, 2));
+
+            const downloadAnchor = document.createElement('a');
+
+            downloadAnchor.setAttribute("href", dataStr);
+
+            downloadAnchor.setAttribute("download", `anime_bodong_backup_${new Date().toISOString().split('T')[0]}.json`);
+
+            document.body.appendChild(downloadAnchor);
+
+            downloadAnchor.click();
+
+            downloadAnchor.remove();
+
+        };
+
+        // Feature: Restore Data from Local JSON File
+
+        window.importDataJSON = function(event) {
+
+            const file = event.target.files[0];
+
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+
+                try {
+
+                    const importedData = JSON.parse(e.target.result);
+
+                    if (Array.isArray(importedData)) {
+
+                        videos = importedData;
+
+                        saveData();
+
+                        renderGrid();
+
+                        renderGenres();
+
+                        renderUserContentTable();
+
+                        notify(`Berhasil mengimpor ${importedData.length} data video!`, 'success');
+
+                    } else {
+
+                        notify('Format file JSON tidak valid.', 'error');
+
+                    }
+
+                } catch (err) {
+
+                    notify('Gagal membaca file JSON. Pastikan file valid.', 'error');
+
+                }
+
+            };
+
+            reader.readAsText(file);
+
+        };
+
+        window.resetDefaultData = async function() {
+
+            const ok = await showDialog({
+
+                title: 'Reset Seluruh Data?',
+
+                message: 'Semua daftar video, file upload yang tersimpan, dan komentar akan dihapus. Tindakan ini tidak dapat dibatalkan.',
+
+                type: 'danger',
+
+                confirm: true,
+
+                confirmText: 'Ya, Reset'
+
+            });
+
+            if (ok) {
+
+                videos.forEach(v => {
+
+                    if (v.video && v.video.storage === 'localStorage') safeRemoveItem('video_data_' + v.video.key);
+
+                });
+
+                videos = [];
+
+                saveData();
+
+                await idbClear('files');
+
+                renderGrid();
+
+                renderGenres();
+
+                renderUserContentTable();
+
+                updateAdminDashboardStats();
+
+                notify('Data berhasil di-reset.', 'success');
+
+            }
+
+        };
+
+        // Helper function to return brand icons based on server name or link URL
+
+        function getServerBrandIcon(name, url) {
+
+            const lowName = (name || '').toLowerCase();
+
+            const lowUrl = (url || '').toLowerCase();
+
+            if (lowName.includes('drive') || lowUrl.includes('drive.google')) {
+
+                return '<i class="fa-brands fa-google-drive text-emerald-400"></i>';
+
+            } else if (lowName.includes('mega') || lowUrl.includes('mega.nz')) {
+
+                return '<i class="fa-solid fa-m text-red-500 font-black"></i>';
+
+            } else if (lowName.includes('telegram') || lowUrl.includes('t.me')) {
+
+                return '<i class="fa-brands fa-telegram text-sky-400"></i>';
+
+            } else if (lowName.includes('kraken') || lowUrl.includes('kraken')) {
+
+                return '<i class="fa-solid fa-cloud-arrow-down text-purple-400"></i>';
+
+            } else if (lowName.includes('pixel') || lowUrl.includes('pixeldrain')) {
+
+                return '<i class="fa-solid fa-box-archive text-amber-400"></i>';
+
+            } else if (lowName.includes('mediafire') || lowUrl.includes('mediafire')) {
+
+                return '<i class="fa-solid fa-fire text-blue-400"></i>';
+
+            }
+
+            return '<i class="fa-solid fa-cloud-arrow-down text-cyan-400"></i>';
+
+        }
+
+        // Helper to retrieve all unique genres dynamically merged & sorted alphabetically
+
+        window.getAllGenres = function() {
+
+            const userGenres = videos.map(v => v.genre).filter(Boolean);
+
+            const combined = Array.from(new Set([...PRESET_GENRES, ...userGenres]));
+
+            return combined.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+
+        };
+
+        // Render Category / Genre Filter Buttons
+
+        window.renderGenres = function() {
+
+            const container = document.getElementById('genreFilters');
+
+            if (!container) return;
+
+            const allGenres = window.getAllGenres();
+
+            const genresList = ['All', ...allGenres];
+
+            container.innerHTML = genresList.map(g => {
+
+                const isActive = activeGenre === g;
+
+                const activeClass = isActive 
+
+                    ? 'bg-cyan-500 text-slate-950 font-bold border-cyan-400 shadow-md shadow-cyan-950' 
+
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border-slate-700/80';
+
+                return `
+
+                    <button onclick="filterByGenre('${g}')" class="px-3.5 py-1.5 rounded-full text-xs transition border whitespace-nowrap ${activeClass}">
+
+                        ${g === 'All' ? '<i class="fa-solid fa-layer-group mr-1"></i> Semua' : g}
+
+                    </button>
+
+                `;
+
+            }).join('');
+
+        };
+
+        window.filterByGenre = function(genre) {
+
+            activeGenre = genre;
+
+            renderGenres();
+
+            renderGrid();
+
+        };
+
+        // Render Home Grid Cards
+
+        window.renderGrid = function(itemsToRender = null) {
+
+            const grid = document.getElementById('videoGrid');
+
+            const empty = document.getElementById('emptyState');
+
+            const countLabel = document.getElementById('itemCount');
+
+            if (!grid) return;
+
+            let list = itemsToRender !== null ? itemsToRender : videos;
+
+            if (activeGenre !== 'All' && itemsToRender === null) {
+
+                list = list.filter(v => (v.genre || '').toLowerCase() === activeGenre.toLowerCase());
+
+            }
+
+            if (countLabel) countLabel.textContent = `${list.length} Video Tersedia`;
+
+            if (list.length === 0) {
+
+                grid.innerHTML = '';
+
+                if (empty) empty.classList.remove('hidden');
+
+                return;
+
+            }
+
+            if (empty) empty.classList.add('hidden');
+
+            grid.innerHTML = list.map(item => `
+
+                <div onclick="openDetail('${item.id}')" class="group bg-brand-card border border-slate-800 hover:border-cyan-500/50 rounded-xl overflow-hidden shadow-lg transition duration-300 hover:-translate-y-1 cursor-pointer flex flex-col">
+
+                    <div class="relative aspect-[3/4] overflow-hidden bg-slate-950">
+
+                        <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/300x400/161f30/38bdf8?text=Anime'">
+
+                        <div class="absolute top-2 left-2 bg-slate-950/80 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-extrabold text-cyan-400 border border-cyan-500/30">
+
+                            ${item.episode || 'EPS'}
+
+                        </div>
+
+                        <div class="absolute bottom-2 right-2 bg-purple-950/90 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-bold text-purple-300 border border-purple-500/30">
+
+                            ${item.quality || '720p'}
+
+                        </div>
+
+                    </div>
+
+                    <div class="p-3 flex-1 flex flex-col justify-between space-y-1">
+
+                        <div>
+
+                            <span class="text-[10px] text-slate-400 font-medium block truncate">${item.series || item.genre || 'Anime'}</span>
+
+                            <h3 class="text-xs font-bold text-slate-100 group-hover:text-cyan-400 transition line-clamp-2 leading-snug">${item.title}</h3>
+
+                        </div>
+
+                        <div class="pt-2 flex items-center justify-between text-[10px] text-slate-500 border-t border-slate-800/80">
+
+                            <span><i class="fa-solid fa-clock text-slate-400 mr-1"></i>${item.duration || '24m'}</span>
+
+                            <span class="text-cyan-400/80">${item.genre || 'Action'}</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `).join('');
+
+        };
+
+        // Realtime Search Handler
+
+        window.handleSearch = function(isMobile = false) {
+
+            const query = (document.getElementById(isMobile ? 'searchInputMobile' : 'searchInput').value || '').toLowerCase().trim();
+
+            if (!query) {
+
+                renderGrid();
+
+                return;
+
+            }
+
+            const filtered = videos.filter(v => 
+
+                (v.title && v.title.toLowerCase().includes(query)) ||
+
+                (v.series && v.series.toLowerCase().includes(query)) ||
+
+                (v.genre && v.genre.toLowerCase().includes(query))
+
+            );
+
+            renderGrid(filtered);
+
+        };
+
+        // Render Playlist / Series Directory
+
+        window.renderPlaylistDirectory = function() {
+
+            const grid = document.getElementById('playlistCardGrid');
+
+            const badge = document.getElementById('playlistCountBadge');
+
+            if (!grid) return;
+
+            // Group videos by series
+
+            const seriesMap = {};
+
+            videos.forEach(v => {
+
+                const sName = v.series || 'Single Episodes';
+
+                if (!seriesMap[sName]) seriesMap[sName] = [];
+
+                seriesMap[sName].push(v);
+
+            });
+
+            const seriesKeys = Object.keys(seriesMap);
+
+            if (badge) badge.textContent = `${seriesKeys.length} Series`;
+
+            if (seriesKeys.length === 0) {
+
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 text-xs">Belum ada seri playlist tersimpan.</div>`;
+
+                return;
+
+            }
+
+            grid.innerHTML = seriesKeys.map(key => {
+
+                const list = seriesMap[key];
+
+                const cover = list[0] ? list[0].thumbnail : 'https://placehold.co/400x300';
+
+                const latestEps = list[list.length - 1] ? list[list.length - 1].episode : 'EPS 1';
+
+                return `
+
+                    <div class="bg-brand-card border border-slate-800 rounded-xl overflow-hidden p-4 space-y-4 hover:border-cyan-500/40 transition">
+
+                        <div class="flex gap-4">
+
+                            <img src="${cover}" alt="${key}" class="w-20 h-28 object-cover rounded-lg border border-slate-700 shadow-md">
+
+                            <div class="flex-1 space-y-1">
+
+                                <span class="text-[10px] bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded font-mono font-bold">${list.length} Episode</span>
+
+                                <h3 class="text-sm font-bold text-white leading-tight">${key}</h3>
+
+                                <p class="text-[11px] text-slate-400">Terakhir: <span class="text-purple-400 font-semibold">${latestEps}</span></p>
+
+                                <p class="text-[11px] text-slate-400">Genre: ${list[0] ? list[0].genre : 'Anime'}</p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="border-t border-slate-800 pt-3">
+
+                            <button onclick="openDetail('${list[0].id}')" class="w-full py-2 bg-slate-900 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2">
+
+                                <i class="fa-solid fa-play"></i> Putar Dari Episode 1
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join('');
+
+        };
+
+        // Open Detail View & Video Player
+
+        window.currentDetailItem = null;
+
+        window.openDetail = function(id) {
+
+            const item = videos.find(v => v.id === id);
+
+            if (!item) return;
+
+            window.currentDetailItem = item;
+
+            switchView('detail');
+
+            // Metadata Update
+
+            document.getElementById('detailBreadcrumbTitle').textContent = item.title;
+
+            document.getElementById('detailTitle').textContent = item.title;
+
+            document.getElementById('detailSeriesName').textContent = item.series || 'N/A';
+
+            document.getElementById('detailGenre').textContent = item.genre || 'Action';
+
+            document.getElementById('detailDuration').textContent = item.duration
+
+                || (item.video && item.video.durationSec ? humanizeDuration(item.video.durationSec) : '24 Menit');
+
+            document.getElementById('detailTotalEps').textContent = item.totalEps || '12 Episode';
+
+            document.getElementById('detailStudio').textContent = item.studio || 'Anime Studio';
+
+            document.getElementById('detailSynopsis').textContent = item.synopsis || 'Tidak ada sinopsis tersedia.';
+
+            document.getElementById('detailThumbnail').src = item.thumbnail;
+
+            document.getElementById('detailBadgeEps').textContent = item.episode || 'EPS';
+
+            document.getElementById('detailBadgeQuality').textContent = item.quality || '720p HD';
+
+            document.getElementById('detailDate').textContent = item.date || '2026-10-28';
+
+            document.getElementById('detailUploader').textContent = item.uploader || 'Admin';
+
+            // Info file (resolusi, ukuran, format, bitrate) dari video yang di-upload
+
+            updateDetailFileInfo(item);
+
+            // Streaming Player Setup (file upload tersimpan > URL embed)
+
+            applyPlayerSource(item);
+
+            // Server Switcher Buttons Setup
+
+            const serverBox = document.getElementById('streamServerBtns');
+
+            if (serverBox) {
+
+                serverBox.innerHTML = item.video
+
+                    ? `<span class="px-2.5 py-1 rounded bg-cyan-500 text-slate-950 font-bold text-xs"><i class="fa-solid fa-hard-drive mr-1"></i>File Upload Tersimpan</span>`
+
+                    : `<button class="px-2.5 py-1 rounded bg-cyan-500 text-slate-950 font-bold text-xs">Server Main HD (Default)</button>`;
+
+            }
+
+            // Playlist Episode Buttons Setup
+
+            const seriesItems = videos.filter(v => (v.series || item.series) === item.series);
+
+            const epsContainer = document.getElementById('playlistEpisodeContainer');
+
+            const seriesTitleLabel = document.getElementById('playlistSeriesTitle');
+
+            const progressLabel = document.getElementById('playlistProgressLabel');
+
+            const prevBtn = document.getElementById('prevEpsBtn');
+
+            const nextBtn = document.getElementById('nextEpsBtn');
+
+            if (seriesTitleLabel) seriesTitleLabel.textContent = item.series || item.title;
+
+            const currentIndex = seriesItems.findIndex(v => v.id === item.id);
+
+            if (progressLabel) progressLabel.textContent = `Episode ${currentIndex + 1} / ${seriesItems.length}`;
+
+            if (prevBtn) {
+
+                prevBtn.disabled = currentIndex <= 0;
+
+            }
+
+            if (nextBtn) {
+
+                nextBtn.disabled = currentIndex >= seriesItems.length - 1;
+
+            }
+
+            if (epsContainer) {
+
+                epsContainer.innerHTML = seriesItems.map((ep, idx) => {
+
+                    const isCurrent = ep.id === item.id;
+
+                    const activeStyle = isCurrent 
+
+                        ? 'bg-cyan-500 text-slate-950 font-bold border-cyan-400' 
+
+                        : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border-slate-800';
+
+                    return `
+
+                        <button onclick="openDetail('${ep.id}')" class="px-2.5 py-2 rounded-lg text-xs transition border flex flex-col items-center justify-center truncate ${activeStyle}">
+
+                            <span class="text-[10px] opacity-80">EPS</span>
+
+                            <span class="font-extrabold truncate max-w-full">${ep.episode || (idx + 1)}</span>
+
+                        </button>
+
+                    `;
+
+                }).join('');
+
+            }
+
+            // Download Matrix & Bookmarks & Comments
+
+            renderDownloadLinks(item);
+
+            updateBookmarkButtonUI();
+
+            renderComments(item);
+
+        };
+
+        // Playlist Prev/Next Navigation
+
+        window.navigatePlaylist = function(direction) {
+
+            if (!currentDetailItem) return;
+
+            const seriesItems = videos.filter(v => (v.series || currentDetailItem.series) === currentDetailItem.series);
+
+            const currentIndex = seriesItems.findIndex(v => v.id === currentDetailItem.id);
+
+            if (direction === 'prev' && currentIndex > 0) {
+
+                openDetail(seriesItems[currentIndex - 1].id);
+
+            } else if (direction === 'next' && currentIndex < seriesItems.length - 1) {
+
+                openDetail(seriesItems[currentIndex + 1].id);
+
+            }
+
+        };
+
+        // Render Download Links Matrix with Brand Icons & Multi-Link handling
+
+        function renderDownloadLinks(item) {
+
+            const container = document.getElementById('downloadLinksContainer');
+
+            if (!container) return;
+
+            const downloads = item.downloads || {};
+
+            const qualities = Object.keys(downloads);
+
+            if (qualities.length === 0) {
+
+                container.innerHTML = `<p class="text-xs text-slate-400">Belum ada link unduhan tersedia untuk video ini.</p>`;
+
+                return;
+
+            }
+
+            container.innerHTML = qualities.map(q => {
+
+                const mirrors = downloads[q] || [];
+
+                const buttons = mirrors.map(m => {
+
+                    let url = m.url;
+
+                    if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+
+                        url = 'https://' + url;
+
+                    }
+
+                    const iconHtml = getServerBrandIcon(m.name, m.url);
+
+                    return `
+
+                        <a href="${url}" target="_blank" rel="noopener noreferrer" 
+
+                           onclick="console.log('Clicked download:', '${m.name}')"
+
+                           class="px-3 py-1.5 bg-slate-900 hover:bg-cyan-500 hover:text-slate-950 text-slate-200 font-semibold rounded-lg border border-slate-700 hover:border-cyan-400 text-xs transition inline-flex items-center gap-2 group">
+
+                            <span>${iconHtml}</span>
+
+                            <span class="group-hover:font-bold">${m.name}</span>
+
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-60 group-hover:opacity-100"></i>
+
+                        </a>
+
+                    `;
+
+                }).join('');
+
+                const badgeColor = q.includes('720') || q.includes('HD') ? 'text-purple-400 border-purple-500/30' : 'text-cyan-400 border-cyan-500/30';
+
+                return `
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 bg-slate-950 rounded-xl border border-slate-800">
+
+                        <div class="flex items-center gap-2">
+
+                            <span class="text-xs font-extrabold px-2.5 py-1 rounded-md bg-slate-900 border ${badgeColor} flex items-center gap-1.5">
+
+                                <i class="fa-solid fa-file-video"></i> ${q}
+
+                            </span>
+
+                            <span class="text-[10px] text-slate-400 font-mono">(${mirrors.length} Mirror Server)</span>
+
+                        </div>
+
+                        <div class="flex flex-wrap gap-2">
+
+                            ${buttons}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join('');
+
+        }
+
+        // ===== UPLOAD FILE VIDEO & PENYIMPANAN PERMANEN =====
+
+        function formatBytes(bytes) {
+
+            if (bytes === null || bytes === undefined) return '-';
+
+            const units = ['B', 'KB', 'MB', 'GB'];
+
+            let value = bytes, i = 0;
+
+            while (value >= 1024 && i < units.length - 1) { value /= 1024; i++; }
+
+            return (i === 0 ? value : value.toFixed(1)) + ' ' + units[i];
+
+        }
+
+        function humanizeDuration(totalSeconds) {
+
+            const s = Math.round(totalSeconds || 0);
+
+            if (!s) return '';
+
+            const h = Math.floor(s / 3600);
+
+            const m = Math.floor((s % 3600) / 60);
+
+            const sec = s % 60;
+
+            const parts = [];
+
+            if (h) parts.push(h + ' Jam');
+
+            if (m) parts.push(m + ' Menit');
+
+            if (!h && sec) parts.push(sec + ' Detik');
+
+            return parts.join(' ');
+
+        }
+
+        function qualityLabel(w, h) {
+
+            if (!w || !h) return '';
+
+            if (h >= 2160) return '2160p 4K';
+
+            if (h >= 1440) return '1440p QHD';
+
+            if (h >= 1080) return '1080p FHD';
+
+            if (h >= 720) return '720p HD';
+
+            if (h >= 480) return '480p SD';
+
+            if (h >= 360) return '360p';
+
+            return w + '×' + h;
+
+        }
+
+        function resolutionLabel(meta) {
+
+            return meta && meta.width && meta.height ? meta.width + '×' + meta.height : '-';
+
+        }
+
+        function fileFormatLabel(meta) {
+
+            if (!meta) return '-';
+
+            const name = meta.name || '';
+
+            const ext = name.indexOf('.') > -1 ? name.split('.').pop().toUpperCase() : '';
+
+            if (ext && ext.length <= 5 && /^[A-Z0-9]+$/.test(ext)) return ext;
+
+            const sub = (meta.type || '').split('/')[1];
+
+            return sub ? sub.toUpperCase() : '-';
+
+        }
+
+        function bitrateLabel(meta) {
+
+            if (!meta || !meta.size || !meta.durationSec) return '-';
+
+            const mbps = (meta.size * 8) / meta.durationSec / 1000000;
+
+            return (mbps >= 1 ? mbps.toFixed(1) : mbps.toFixed(2)) + ' Mbps';
+
+        }
+
+        function describeVideoMeta(meta) {
+
+            const parts = [];
+
+            if (meta && meta.width && meta.height) parts.push(meta.width + '×' + meta.height);
+
+            if (meta && meta.durationSec) parts.push(humanizeDuration(meta.durationSec));
+
+            return parts.join(' • ');
+
+        }
+
+        function updateDetailFileInfo(item) {
+
+            const box = document.getElementById('detailFileInfo');
+
+            if (!box) return;
+
+            const meta = item && item.video;
+
+            if (!meta) { box.classList.add('hidden'); return; }
+
+            box.classList.remove('hidden');
+
+            const resEl = document.getElementById('detailResolution');
+
+            const sizeEl = document.getElementById('detailFileSize');
+
+            const fmtEl = document.getElementById('detailFormat');
+
+            const brEl = document.getElementById('detailBitrate');
+
+            if (resEl) resEl.textContent = resolutionLabel(meta);
+
+            if (sizeEl) sizeEl.textContent = meta.size ? formatBytes(meta.size) : '-';
+
+            if (fmtEl) fmtEl.textContent = fileFormatLabel(meta);
+
+            if (brEl) brEl.textContent = bitrateLabel(meta);
+
+        }
+
+        function showFilePreview(info) {
+
+            const wrap = document.getElementById('uploadFilePreview');
+
+            const thumb = document.getElementById('uploadFileThumb');
+
+            const name = document.getElementById('uploadFileName');
+
+            const meta = document.getElementById('uploadFileMeta');
+
+            if (!wrap) return;
+
+            wrap.classList.remove('hidden');
+
+            wrap.classList.add('flex');
+
+            if (thumb && info.thumb) thumb.src = info.thumb;
+
+            if (name) name.textContent = info.name || 'video.mp4';
+
+            if (meta) {
+
+                const parts = [formatBytes(info.size)];
+
+                if (info.extra) parts.push(info.extra);
+
+                meta.textContent = info.existing
+
+                    ? 'Tersimpan permanen • ' + parts.join(' • ')
+
+                    : parts.join(' • ') + ' • akan disimpan permanen';
+
+            }
+
+        }
+
+        window.clearSelectedVideoFile = function () {
+
+            pendingFile = null;
+
+            const input = document.getElementById('formVideoFile');
+
+            if (input) input.value = '';
+
+            const wrap = document.getElementById('uploadFilePreview');
+
+            if (wrap) { wrap.classList.add('hidden'); wrap.classList.remove('flex'); }
+
+            resetUploadProgress();
+
+        };
+
+        // Baca metadata file (durasi, resolusi) sekaligus buat thumbnail
+
+        function probeVideoFile(file) {
+
+            return new Promise(function (resolve) {
+
+                let objectUrl = null;
+
+                let done = false;
+
+                const finish = function (thumb, meta) {
+
+                    if (done) return;
+
+                    done = true;
+
+                    if (objectUrl) URL.revokeObjectURL(objectUrl);
+
+                    resolve({ thumb: thumb || null, meta: meta || null });
+
+                };
+
+                try {
+
+                    objectUrl = URL.createObjectURL(file);
+
+                    const probe = document.createElement('video');
+
+                    probe.preload = 'metadata';
+
+                    probe.muted = true;
+
+                    probe.playsInline = true;
+
+                    probe.onloadedmetadata = function () {
+
+                        const duration = isFinite(probe.duration) ? probe.duration : 0;
+
+                        const meta = {
+
+                            durationSec: duration > 0 ? Math.round(duration * 100) / 100 : null,
+
+                            width: probe.videoWidth || null,
+
+                            height: probe.videoHeight || null
+
+                        };
+
+                        probe.onseeked = function () {
+
+                            try {
+
+                                const canvas = document.createElement('canvas');
+
+                                canvas.width = 360;
+
+                                canvas.height = Math.round(360 * ((probe.videoHeight || 640) / (probe.videoWidth || 480))) || 480;
+
+                                canvas.getContext('2d').drawImage(probe, 0, 0, canvas.width, canvas.height);
+
+                                finish(canvas.toDataURL('image/jpeg', 0.75), meta);
+
+                            } catch (e) { finish(null, meta); }
+
+                        };
+
+                        try { probe.currentTime = Math.min(1, Math.max(0.1, duration / 2)); }
+
+                        catch (e) { finish(null, meta); }
+
+                    };
+
+                    probe.onerror = function () { finish(null, null); };
+
+                    setTimeout(function () { finish(null, null); }, 10000);
+
+                    probe.src = objectUrl;
+
+                } catch (e) { finish(null, null); }
+
+            });
+
+        }
+
+        window.handleVideoFileChange = async function (input) {
+
+            const file = input.files && input.files[0];
+
+            if (!file) { clearSelectedVideoFile(); return; }
+
+            const isVideo = (file.type && file.type.indexOf('video/') === 0) || /\.(mp4|webm|ogg|ogv|mkv|mov|m4v|avi)$/i.test(file.name);
+
+            if (!isVideo) {
+
+                notify('File yang dipilih bukan video. Gunakan MP4, WebM, MKV, atau MOV.', 'error');
+
+                input.value = '';
+
+                return;
+
+            }
+
+            if (file.size > 500 * 1024 * 1024) {
+
+                const proceed = await showDialog({
+
+                    title: 'File Sangat Besar',
+
+                    message: 'Ukuran file ' + formatBytes(file.size) + '. Browser biasanya membatasi penyimpanan sekitar 1 GB, dan proses simpan bisa lambat. Lanjutkan?',
+
+                    type: 'warning',
+
+                    confirm: true,
+
+                    confirmText: 'Lanjutkan'
+
+                });
+
+                if (!proceed) {
+
+                    input.value = '';
+
+                    return;
+
+                }
+
+            }
+
+            resetUploadProgress();
+
+            pendingFile = { blob: file, name: file.name, type: file.type || 'video/mp4', size: file.size, thumb: null, meta: null };
+
+            showFilePreview({ name: file.name, size: file.size, thumb: 'https://placehold.co/160x200/161f30/38bdf8?text=VIDEO' });
+
+            const titleInput = document.getElementById('formTitleInput');
+
+            if (titleInput && !titleInput.value.trim()) {
+
+                titleInput.value = file.name.replace(/\.[^.]+$/, '');
+
+            }
+
+            const probed = await probeVideoFile(file);
+
+            if (pendingFile && pendingFile.blob === file) {
+
+                pendingFile.thumb = probed.thumb;
+
+                pendingFile.meta = probed.meta;
+
+                const metaForPreview = Object.assign({}, probed.meta || {}, { size: file.size });
+
+                showFilePreview({
+
+                    name: file.name,
+
+                    size: file.size,
+
+                    thumb: probed.thumb || undefined,
+
+                    extra: describeVideoMeta(metaForPreview)
+
+                });
+
+                autoFillVideoFields(probed.meta);
+
+            }
+
+        };
+
+        // Isi otomatis kolom Kualitas & Durasi dari metadata file (tanpa menimpa isian user)
+
+        function autoFillVideoFields(meta) {
+
+            if (!meta) return;
+
+            const qualityInput = document.getElementById('formQualityInput');
+
+            const durationInput = document.getElementById('formDurationInput');
+
+            if (qualityInput && !qualityInput.value.trim() && meta.width && meta.height) {
+
+                qualityInput.value = qualityLabel(meta.width, meta.height);
+
+            }
+
+            if (durationInput && !durationInput.value.trim() && meta.durationSec) {
+
+                durationInput.value = humanizeDuration(meta.durationSec);
+
+            }
+
+        }
+
+        // ===== PENYIMPANAN FILE: satu transaksi untuk file kecil, chunk untuk file besar =====
+
+        const IDB_SINGLE_LIMIT = 32 * 1024 * 1024;   // <= 32 MB: simpan utuh
+
+        const IDB_CHUNK_SIZE = 8 * 1024 * 1024;      // > 32 MB: potong 8 MB per transaksi
+
+        window.updateUploadProgress = function(ratio) {
+
+            const wrap = document.getElementById('uploadProgressWrap');
+
+            const bar = document.getElementById('uploadProgressBar');
+
+            const text = document.getElementById('uploadProgressText');
+
+            if (!wrap || !bar || !text) return;
+
+            wrap.classList.remove('hidden');
+
+            const pct = Math.max(0, Math.min(100, Math.round(ratio * 100)));
+
+            bar.style.width = pct + '%';
+
+            text.textContent = 'Menyimpan file video... ' + pct + '%';
+
+        };
+
+        function resetUploadProgress() {
+
+            const wrap = document.getElementById('uploadProgressWrap');
+
+            const bar = document.getElementById('uploadProgressBar');
+
+            if (wrap) wrap.classList.add('hidden');
+
+            if (bar) bar.style.width = '0%';
+
+        }
+
+        async function deleteChunks(key, count) {
+
+            for (let i = 0; i < (count || 0); i++) {
+
+                await idbDelete('files', key + '::' + i);
+
+            }
+
+        }
+
+        // Simpan blob video permanen. IndexedDB (chunk utk file besar) = utama, localStorage = cadangan file kecil.
+
+        async function saveVideoFile(id, fileObj, onProgress) {
+
+            const base = { key: id, name: fileObj.name, type: fileObj.type, size: fileObj.size };
+
+            if (fileObj.size <= IDB_SINGLE_LIMIT) {
+
+                const idbSaved = await idbPut('files', id, fileObj.blob);
+
+                if (idbSaved) {
+
+                    if (onProgress) onProgress(1);
+
+                    return Object.assign({}, base, { storage: 'indexeddb' });
+
+                }
+
+            } else {
+
+                const totalChunks = Math.ceil(fileObj.size / IDB_CHUNK_SIZE);
+
+                let savedChunks = 0;
+
+                for (let i = 0; i < totalChunks; i++) {
+
+                    const start = i * IDB_CHUNK_SIZE;
+
+                    const slice = fileObj.blob.slice(start, Math.min(fileObj.size, start + IDB_CHUNK_SIZE));
+
+                    const ok = await idbPut('files', id + '::' + i, slice);
+
+                    if (!ok) break;
+
+                    savedChunks = i + 1;
+
+                    if (onProgress) onProgress(savedChunks / totalChunks);
+
+                }
+
+                if (savedChunks === totalChunks) {
+
+                    return Object.assign({}, base, {
+
+                        storage: 'indexeddb-chunks',
+
+                        chunks: totalChunks,
+
+                        chunkSize: IDB_CHUNK_SIZE
+
+                    });
+
+                }
+
+                await deleteChunks(id, savedChunks);
+
+            }
+
+            if (fileObj.size <= 4 * 1024 * 1024) {
+
+                const dataUrl = await blobToDataURL(fileObj.blob);
+
+                if (dataUrl && safeSetItem('video_data_' + id, dataUrl)) {
+
+                    if (onProgress) onProgress(1);
+
+                    return Object.assign({}, base, { storage: 'localStorage' });
+
+                }
+
+            }
+
+            return null;
+
+        }
+
+        async function readStoredVideoSource(item) {
+
+            const meta = item && item.video;
+
+            if (!meta) return null;
+
+            if (meta.storage === 'localStorage') {
+
+                return safeGetItem('video_data_' + meta.key);
+
+            }
+
+            if (meta.storage === 'indexeddb-chunks') {
+
+                const parts = [];
+
+                for (let i = 0; i < (meta.chunks || 0); i++) {
+
+                    const part = await idbGet('files', meta.key + '::' + i);
+
+                    if (!part) return null;
+
+                    parts.push(part);
+
+                }
+
+                const blob = new Blob(parts, { type: meta.type || 'video/mp4' });
+
+                return URL.createObjectURL(blob);
+
+            }
+
+            const blob = await idbGet('files', meta.key);
+
+            return blob ? URL.createObjectURL(blob) : null;
+
+        }
+
+        async function deleteVideoAssets(item) {
+
+            if (!item || !item.video) return;
+
+            const meta = item.video;
+
+            if (meta.storage === 'localStorage') {
+
+                safeRemoveItem('video_data_' + meta.key);
+
+            } else if (meta.storage === 'indexeddb-chunks') {
+
+                await deleteChunks(meta.key, meta.chunks);
+
+            } else {
+
+                await idbDelete('files', meta.key);
+
+            }
+
+        }
+
+        function updateStorageStatusUI() {
+
+            const chip = document.getElementById('storageStatusChip');
+
+            if (!chip) return;
+
+            const info = window.storageInfo || {};
+
+            if (info.indexedDB) {
+
+                chip.textContent = 'Penyimpanan permanen aktif: IndexedDB + localStorage';
+
+                chip.className = 'text-[10px] px-2 py-0.5 rounded border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-semibold';
+
+            } else if (info.localStorage) {
+
+                chip.textContent = 'Penyimpanan terbatas: localStorage saja (video besar tidak muat)';
+
+                chip.className = 'text-[10px] px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-400 font-semibold';
+
+            } else {
+
+                chip.textContent = 'Penyimpanan DIBLOKIR — data hilang setelah reload';
+
+                chip.className = 'text-[10px] px-2 py-0.5 rounded border border-red-500/30 bg-red-500/10 text-red-400 font-semibold';
+
+            }
+
+        }
+
+        window.runStorageSelfTest = async function () {
+
+            const probe = '__selftest__' + Date.now();
+
+            const lsOk = safeSetItem(probe, 'ok') && safeGetItem(probe) === 'ok';
+
+            safeRemoveItem(probe);
+
+            let idbOk = false;
+
+            try {
+
+                idbOk = await idbPut('kv', probe, 'ok');
+
+                if (idbOk) idbOk = (await idbGet('kv', probe)) === 'ok';
+
+                await idbDelete('kv', probe);
+
+            } catch (e) { idbOk = false; }
+
+            const lines = [
+
+                'localStorage : ' + (lsOk ? 'OK' : 'TIDAK TERSEDIA'),
+
+                'IndexedDB    : ' + (idbOk ? 'OK' : 'TIDAK TERSEDIA'),
+
+                '',
+
+                (idbOk || lsOk)
+
+                    ? 'Video yang di-upload akan TETAP tersimpan setelah halaman di-reload.'
+
+                    : 'Lingkungan ini memblokir penyimpanan. Data akan hilang setelah reload.'
+
+            ];
+
+            try {
+
+                if (navigator.storage && navigator.storage.estimate) {
+
+                    const est = await navigator.storage.estimate();
+
+                    if (est && est.quota) {
+
+                        lines.splice(2, 0, 'Kuota browser: ' + formatBytes(est.quota) + ' (terpakai ' + formatBytes(est.usage || 0) + ')');
+
+                    }
+
+                }
+
+            } catch (e) {}
+
+            await showDialog({
+
+                title: 'Hasil Uji Penyimpanan',
+
+                message: lines.join('\n'),
+
+                type: (idbOk || lsOk) ? 'info' : 'error'
+
+            });
+
+        };
+
+        async function applyPlayerSource(item) {
+
+            const iframe = document.getElementById('videoIframe');
+
+            const player = document.getElementById('videoPlayer');
+
+            const notice = document.getElementById('playerNotice');
+
+            const noticeText = document.getElementById('playerNoticeText');
+
+            if (!iframe || !player) return;
+
+            const token = ++playerRequestToken;
+
+            try { player.pause(); } catch (e) {}
+
+            player.removeAttribute('src');
+
+            player.load();
+
+            if (currentObjectUrl) {
+
+                URL.revokeObjectURL(currentObjectUrl);
+
+                currentObjectUrl = null;
+
+            }
+
+            player.classList.add('hidden');
+
+            if (notice) notice.classList.add('hidden');
+
+            if (!item || !item.video) {
+
+                iframe.classList.remove('hidden');
+
+                iframe.src = (item && item.embedUrl) ? item.embedUrl : 'about:blank';
+
+                return;
+
+            }
+
+            iframe.classList.add('hidden');
+
+            iframe.src = 'about:blank';
+
+            player.classList.remove('hidden');
+
+            // Lengkapi metadata file lama (upload sebelum fitur info file ada)
+
+            player.onloadedmetadata = function () {
+
+                if (!item || !item.video || !player.videoWidth || !player.videoHeight) return;
+
+                const durationSec = isFinite(player.duration) && player.duration > 0
+
+                    ? Math.round(player.duration * 100) / 100
+
+                    : null;
+
+                const needsUpdate = item.video.width !== player.videoWidth
+
+                    || item.video.height !== player.videoHeight
+
+                    || (durationSec && item.video.durationSec !== durationSec);
+
+                if (!needsUpdate) return;
+
+                item.video.width = player.videoWidth;
+
+                item.video.height = player.videoHeight;
+
+                if (durationSec) item.video.durationSec = durationSec;
+
+                saveData();
+
+                if (window.currentDetailItem && window.currentDetailItem.id === item.id) updateDetailFileInfo(item);
+
+            };
+
+            const noticeIcon = document.getElementById('playerNoticeIcon');
+
+            if (item.video.storage === 'indexeddb-chunks' && notice && noticeText) {
+
+                notice.classList.remove('hidden');
+
+                if (noticeIcon) noticeIcon.className = 'fa-solid fa-spinner fa-spin text-2xl text-cyan-400';
+
+                noticeText.textContent = 'Menyiapkan file video tersimpan (' + formatBytes(item.video.size) + ')...';
+
+            }
+
+            let src = null;
+
+            try {
+
+                src = await readStoredVideoSource(item);
+
+            } catch (err) { console.warn('[player] gagal memuat file:', err); }
+
+            if (token !== playerRequestToken) {
+
+                if (src && src.indexOf('blob:') === 0) URL.revokeObjectURL(src);
+
+                return;
+
+            }
+
+            if (!src) {
+
+                player.classList.add('hidden');
+
+                if (notice) notice.classList.remove('hidden');
+
+                if (noticeIcon) noticeIcon.className = 'fa-solid fa-triangle-exclamation text-2xl text-amber-400';
+
+                if (noticeText) noticeText.textContent = 'File video tersimpan tidak dapat dibuka di lingkungan ini. Coba reload halaman atau gunakan URL embed.';
+
+                return;
+
+            }
+
+            if (notice) notice.classList.add('hidden');
+
+            if (src.indexOf('blob:') === 0) currentObjectUrl = src;
+
+            player.src = src;
+
+            player.load();
+
+        }
+
+        // Bookmark / Favorite System
+
+        window.toggleBookmark = function() {
+
+            if (!window.currentUser) {
+
+                openModal('userAuthModal');
+
+                return;
+
+            }
+
+            if (!currentDetailItem) return;
+
+            let bookmarks = JSON.parse(safeGetItem('user_bookmarks') || '[]');
+
+            const idx = bookmarks.indexOf(currentDetailItem.id);
+
+            if (idx > -1) {
+
+                bookmarks.splice(idx, 1);
+
+            } else {
+
+                bookmarks.push(currentDetailItem.id);
+
+            }
+
+            safeSetItem('user_bookmarks', JSON.stringify(bookmarks));
+
+            updateBookmarkButtonUI();
+
+        };
+
+        function updateBookmarkButtonUI() {
+
+            if (!currentDetailItem) return;
+
+            const bookmarks = JSON.parse(safeGetItem('user_bookmarks') || '[]');
+
+            const isSaved = bookmarks.includes(currentDetailItem.id);
+
+            
+
+            const btn = document.getElementById('bookmarkBtn');
+
+            const icon = document.getElementById('bookmarkIcon');
+
+            const text = document.getElementById('bookmarkText');
+
+            if (isSaved) {
+
+                icon.className = 'fa-solid fa-bookmark';
+
+                text.textContent = 'Tersimpan';
+
+                btn.className = 'px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs transition flex items-center gap-1.5';
+
+            } else {
+
+                icon.className = 'fa-regular fa-bookmark';
+
+                text.textContent = 'Simpan Favorit';
+
+                btn.className = 'px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 text-xs font-semibold transition flex items-center gap-1.5';
+
+            }
+
+        }
+
+        // Comment System
+
+        window.addComment = function() {
+
+            const authorInput = document.getElementById('commentAuthorInput');
+
+            const input = document.getElementById('commentInput');
+
+            const text = input.value.trim();
+
+            if (!text || !currentDetailItem) return;
+
+            // Determine author name: logged in user > user input > Guest
+
+            let authorName = 'Guest';
+
+            if (window.currentUser) {
+
+                authorName = window.currentUser.displayName || window.currentUser.email;
+
+            } else if (authorInput && authorInput.value.trim()) {
+
+                authorName = authorInput.value.trim();
+
+            }
+
+            const avatarSeed = encodeURIComponent(authorName);
+
+            const avatar = window.currentUser && window.currentUser.photoURL 
+
+                ? window.currentUser.photoURL 
+
+                : `https://api.dicebear.com/7.x/bottts/svg?seed=${avatarSeed}`;
+
+            if (!currentDetailItem.comments) currentDetailItem.comments = [];
+
+            currentDetailItem.comments.unshift({
+
+                user: authorName,
+
+                avatar: avatar,
+
+                text: text,
+
+                time: 'Baru saja'
+
+            });
+
+            saveData();
+
+            input.value = '';
+
+            renderComments(currentDetailItem);
+
+        };
+
+        function renderComments(item) {
+
+            const container = document.getElementById('commentList');
+
+            if (!container) return;
+
+            const comments = item.comments || [];
+
+            if (comments.length === 0) {
+
+                container.innerHTML = `<p class="text-xs text-slate-500">Belum ada komentar. Jadilah yang pertama berkomentar!</p>`;
+
+                return;
+
+            }
+
+            // Check if current logged in user is admin
+
+            const isAdmin = window.currentUser && (window.currentUser.displayName === 'admin' || window.currentUser.email === 'user-admin.com');
+
+            container.innerHTML = comments.map((c, index) => `
+
+                <div class="flex gap-3 bg-slate-950 p-2.5 rounded-lg border border-slate-800/80 items-start justify-between group hover:border-slate-700 transition">
+
+                    <div class="flex gap-3 flex-1">
+
+                        <img src="${c.avatar}" alt="Avatar" class="w-7 h-7 rounded-full bg-slate-800 object-cover border border-slate-700">
+
+                        <div class="text-xs space-y-0.5 flex-1">
+
+                            <div class="flex justify-between items-center">
+
+                                <span class="font-bold ${c.user === 'Guest' || !c.user ? 'text-slate-400' : 'text-cyan-400'}">${c.user || 'Guest'}</span>
+
+                                <span class="text-[10px] text-slate-500">${c.time}</span>
+
+                            </div>
+
+                            <p class="text-slate-300 leading-relaxed">${c.text}</p>
+
+                        </div>
+
+                    </div>
+
+                    ${isAdmin ? `
+
+                        <button onclick="deleteComment(${index})" title="Hapus Permanen Komentar Ini" class="text-red-400/70 hover:text-red-400 hover:bg-red-500/10 p-1.5 rounded-lg text-xs transition border border-transparent hover:border-red-500/30 flex items-center justify-center" aria-label="Hapus Komentar">
+
+                            <i class="fa-solid fa-trash-can"></i>
+
+                        </button>
+
+                    ` : ''}
+
+                </div>
+
+            `).join('');
+
+        }
+
+        // Admin functionality: Delete individual comment permanently
+
+        window.deleteComment = function(commentIndex) {
+
+            if (!currentDetailItem || !currentDetailItem.comments) return;
+
+            
+
+            // Hapus komentar dari array data secara langsung
+
+            currentDetailItem.comments.splice(commentIndex, 1);
+
+            
+
+            // Simpan permanen + re-render daftar komentar
+
+            saveData();
+
+            renderComments(currentDetailItem);
+
+        };
+
+        // Upload & Content Management Logic
+
+        window.toggleCustomGenreInput = function(selectEl) {
+
+            const customInput = document.getElementById('customGenreInput');
+
+            if (selectEl.value === '__NEW__') {
+
+                customInput.classList.remove('hidden');
+
+                customInput.required = true;
+
+            } else {
+
+                customInput.classList.add('hidden');
+
+                customInput.required = false;
+
+            }
+
+        };
+
+        function populateGenreDropdown() {
+
+            const select = document.getElementById('formGenreInput');
+
+            if (!select) return;
+
+            const genres = getAllGenres();
+
+            
+
+            select.innerHTML = genres.map(g => `<option value="${g}">${g}</option>`).join('') +
+
+                `<option value="__NEW__">+ Tambah Genre Baru...</option>`;
+
+        }
+
+        window.usePreviousFormat = function() {
+
+            const last = safeGetItem('last_video_format');
+
+            let data = last ? JSON.parse(last) : (videos[0] || null);
+
+            if (!data) {
+
+                notify('Belum ada format video sebelumnya.', 'warning');
+
+                return;
+
+            }
+
+            document.getElementById('formTitleInput').value = data.title || '';
+
+            document.getElementById('formSeriesInput').value = data.series || '';
+
+            document.getElementById('formEpisodeInput').value = data.episode || '';
+
+            document.getElementById('formGenreInput').value = data.genre || 'Action';
+
+            document.getElementById('formQualityInput').value = data.quality || '720p HD';
+
+            document.getElementById('formDurationInput').value = data.duration || '24 Menit';
+
+            document.getElementById('formTotalEpsInput').value = data.totalEps || '12 Episode';
+
+            document.getElementById('formStudioInput').value = data.studio || 'Anime Studio';
+
+            document.getElementById('formThumbnailInput').value = data.thumbnail || '';
+
+            document.getElementById('formEmbedInput').value = data.embedUrl || '';
+
+            document.getElementById('formSynopsisInput').value = data.synopsis || '';
+
+            
+
+            if (data.downloads) {
+
+                if (data.downloads['480p']) {
+
+                    document.getElementById('dl480p').value = data.downloads['480p'].map(m => `${m.name}:${m.url}`).join(', ');
+
+                }
+
+                if (data.downloads['720p']) {
+
+                    document.getElementById('dl720p').value = data.downloads['720p'].map(m => `${m.name}:${m.url}`).join(', ');
+
+                }
+
+            }
+
+        };
+
+        let isSavingVideo = false;
+
+        window.handleFormSubmit = async function(e) {
+
+            e.preventDefault();
+
+            if (isSavingVideo) return;
+
+            isSavingVideo = true;
+
+            const submitBtn = e.target ? e.target.querySelector('button[type="submit"]') : null;
+
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.classList.add('opacity-60', 'cursor-wait'); }
+
+            const finishSaving = function() {
+
+                isSavingVideo = false;
+
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.classList.remove('opacity-60', 'cursor-wait'); }
+
+            };
+
+            try {
+
+            
+
+            let genreVal = document.getElementById('formGenreInput').value;
+
+            if (genreVal === '__NEW__') {
+
+                genreVal = document.getElementById('customGenreInput').value.trim() || 'Anime';
+
+            }
+
+            // Enhanced multi-mirror link parser
+
+            const parseMirrors = (str) => {
+
+                if (!str.trim()) return [];
+
+                return str.split(',').map(item => {
+
+                    const parts = item.split(':');
+
+                    if (parts.length >= 2) {
+
+                        return { name: parts[0].trim(), url: parts.slice(1).join(':').trim() };
+
+                    }
+
+                    return { name: 'Server Mirror', url: item.trim() };
+
+                }).filter(m => m.url.length > 0);
+
+            };
+
+            const downloads = {};
+
+            const dl480 = parseMirrors(document.getElementById('dl480p').value);
+
+            const dl720 = parseMirrors(document.getElementById('dl720p').value);
+
+            if (dl480.length > 0) downloads['480p'] = dl480;
+
+            if (dl720.length > 0) downloads['720p'] = dl720;
+
+            const editId = document.getElementById('editItemId').value;
+
+            const existing = editId ? videos.find(v => v.id === editId) : null;
+
+            const id = editId || 'vid_' + Date.now();
+
+            const embedUrl = document.getElementById('formEmbedInput').value.trim();
+
+            if (!pendingFile && !embedUrl && !(existing && existing.video)) {
+
+                notify('Pilih file video untuk di-upload, atau isi URL embed player terlebih dahulu.', 'warning');
+
+                finishSaving();
+
+                return;
+
+            }
+
+            let videoMeta = existing && existing.video ? existing.video : null;
+
+            if (pendingFile) {
+
+                const savedFile = await saveVideoFile(id, pendingFile, updateUploadProgress);
+
+                if (!savedFile) {
+
+                    resetUploadProgress();
+
+                    finishSaving();
+
+                    await showDialog({
+
+                        title: 'Gagal Menyimpan Video',
+
+                        message: 'Penyimpanan browser (IndexedDB/localStorage) diblokir atau penuh, sehingga video tidak akan bertahan setelah reload.\n\nCoba file lebih kecil, kosongkan data lama, atau buka halaman ini langsung (bukan di iframe yang dibatasi).',
+
+                        type: 'error'
+
+                    });
+
+                    return;
+
+                }
+
+                const probe = pendingFile.meta || {};
+
+                videoMeta = Object.assign({}, savedFile, {
+
+                    width: probe.width || null,
+
+                    height: probe.height || null,
+
+                    durationSec: probe.durationSec || null,
+
+                    uploadedAt: new Date().toISOString()
+
+                });
+
+            }
+
+            resetUploadProgress();
+
+            const manualThumb = document.getElementById('formThumbnailInput').value.trim();
+
+            const videoObj = {
+
+                id: id,
+
+                title: document.getElementById('formTitleInput').value.trim(),
+
+                series: document.getElementById('formSeriesInput').value.trim(),
+
+                episode: document.getElementById('formEpisodeInput').value.trim(),
+
+                genre: genreVal,
+
+                quality: document.getElementById('formQualityInput').value.trim() || '720p HD',
+
+                duration: document.getElementById('formDurationInput').value.trim() || '24 Menit',
+
+                totalEps: document.getElementById('formTotalEpsInput').value.trim() || '12 Episode',
+
+                studio: document.getElementById('formStudioInput').value.trim() || 'Anime Studio',
+
+                thumbnail: manualThumb
+
+                    || (pendingFile && pendingFile.thumb)
+
+                    || (existing && existing.thumbnail)
+
+                    || 'https://placehold.co/300x400/161f30/38bdf8?text=Anime',
+
+                embedUrl: embedUrl,
+
+                video: videoMeta,
+
+                synopsis: document.getElementById('formSynopsisInput').value.trim(),
+
+                uploader: window.currentUser ? (window.currentUser.displayName || 'Admin') : 'Admin',
+
+                date: new Date().toISOString().split('T')[0],
+
+                downloads: downloads,
+
+                comments: (existing && existing.comments) ? existing.comments : []
+
+            };
+
+            // Save last format cache (tanpa data blob)
+
+            const lastFormat = Object.assign({}, videoObj);
+
+            delete lastFormat.video;
+
+            safeSetItem('last_video_format', JSON.stringify(lastFormat));
+
+            if (editId) {
+
+                const idx = videos.findIndex(v => v.id === editId);
+
+                if (idx > -1) videos[idx] = videoObj;
+
+            } else {
+
+                videos.unshift(videoObj);
+
+            }
+
+            pendingFile = null;
+
+            saveData();
+
+            resetForm();
+
+            refreshAllViews();
+
+            notify(
+
+                videoMeta
+
+                    ? 'Video berhasil disimpan permanen. Reload halaman untuk memastikannya masih ada.'
+
+                    : 'Video berhasil diterbitkan.',
+
+                'success'
+
+            );
+
+            } catch (err) {
+
+                console.error('[upload] gagal menyimpan:', err);
+
+                resetUploadProgress();
+
+                notify('Terjadi kesalahan saat menyimpan video: ' + (err && err.message ? err.message : err), 'error');
+
+            } finally {
+
+                finishSaving();
+
+            }
+
+        };
+
+        window.resetForm = function() {
+
+            const form = document.getElementById('uploadForm');
+
+            if (form) form.reset();
+
+            const editIdEl = document.getElementById('editItemId');
+
+            if (editIdEl) editIdEl.value = '';
+
+            const formTitle = document.getElementById('formTitle');
+
+            if (formTitle) formTitle.innerHTML = `<i class="fa-solid fa-plus-circle text-cyan-400"></i> Form Tambah Video / Episode Baru`;
+
+            const customGenre = document.getElementById('customGenreInput');
+
+            if (customGenre) customGenre.classList.add('hidden');
+
+            clearSelectedVideoFile();
+
+        };
+
+        window.renderUserContentTable = function() {
+
+            const tbody = document.getElementById('userContentTableBody');
+
+            if (!tbody) return;
+
+            if (videos.length === 0) {
+
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">Belum ada video diunggah.</td></tr>`;
+
+                return;
+
+            }
+
+            tbody.innerHTML = videos.map(item => `
+
+                <tr class="hover:bg-slate-900/60">
+
+                    <td class="p-3">
+
+                        <img src="${item.thumbnail}" alt="Thumb" class="w-10 h-14 object-cover rounded border border-slate-700">
+
+                    </td>
+
+                    <td class="p-3">
+
+                        <div class="font-bold text-white truncate max-w-[180px]">${item.title}</div>
+
+                        <div class="text-[10px] text-purple-400">${item.series || '-'}</div>
+
+                    </td>
+
+                    <td class="p-3 font-mono font-bold text-cyan-400 text-xs">${item.episode || 'EPS'}</td>
+
+                    <td class="p-3 text-slate-400">${item.genre || 'Anime'}</td>
+
+                    <td class="p-3 font-mono text-[10px] text-slate-400">
+
+                        ${item.video ? `
+
+                            <div class="text-slate-200">${formatBytes(item.video.size)}</div>
+
+                            <div class="text-slate-500">${resolutionLabel(item.video)}${item.video.durationSec ? ' • ' + humanizeDuration(item.video.durationSec) : ''}</div>
+
+                        ` : '<span class="text-slate-600">Embed</span>'}
+
+                    </td>
+
+                    <td class="p-3">
+
+                        <div class="flex gap-2">
+
+                            <button onclick="editVideo('${item.id}')" class="p-1.5 bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 rounded transition"><i class="fa-solid fa-pen-to-square"></i></button>
+
+                            <button onclick="promptDeleteVideo('${item.id}')" class="p-1.5 bg-slate-800 hover:bg-red-500 hover:text-white text-red-400 rounded transition"><i class="fa-solid fa-trash-can"></i></button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `).join('');
+
+        };
+
+        window.editVideo = function(id) {
+
+            const item = videos.find(v => v.id === id);
+
+            if (!item) return;
+
+            document.getElementById('editItemId').value = item.id;
+
+            document.getElementById('formTitleInput').value = item.title;
+
+            document.getElementById('formSeriesInput').value = item.series || '';
+
+            document.getElementById('formEpisodeInput').value = item.episode || '';
+
+            document.getElementById('formGenreInput').value = item.genre || 'Action';
+
+            document.getElementById('formQualityInput').value = item.quality || '';
+
+            document.getElementById('formDurationInput').value = item.duration || '';
+
+            document.getElementById('formTotalEpsInput').value = item.totalEps || '';
+
+            document.getElementById('formStudioInput').value = item.studio || '';
+
+            document.getElementById('formThumbnailInput').value = item.thumbnail;
+
+            document.getElementById('formEmbedInput').value = item.embedUrl;
+
+            document.getElementById('formSynopsisInput').value = item.synopsis || '';
+
+            if (item.downloads) {
+
+                if (item.downloads['480p']) {
+
+                    document.getElementById('dl480p').value = item.downloads['480p'].map(m => `${m.name}:${m.url}`).join(', ');
+
+                }
+
+                if (item.downloads['720p']) {
+
+                    document.getElementById('dl720p').value = item.downloads['720p'].map(m => `${m.name}:${m.url}`).join(', ');
+
+                }
+
+            }
+
+            pendingFile = null;
+
+            const fileInput = document.getElementById('formVideoFile');
+
+            if (fileInput) fileInput.value = '';
+
+            if (item.video) {
+
+                showFilePreview({ name: item.video.name || 'video tersimpan', size: item.video.size, thumb: item.thumbnail, existing: true });
+
+            } else {
+
+                clearSelectedVideoFile();
+
+            }
+
+            document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-cyan-400"></i> Edit Data Video`;
+
+            window.scrollTo({ top: document.getElementById('uploadForm').offsetTop - 80, behavior: 'smooth' });
+
+        };
+
+        window.promptDeleteVideo = function(id) {
+
+            const item = videos.find(v => v.id === id);
+
+            if (!item) return;
+
+            pendingDeleteId = id;
+
+            document.getElementById('deletePreviewThumb').src = item.thumbnail;
+
+            document.getElementById('deletePreviewTitle').textContent = item.title;
+
+            document.getElementById('deletePreviewEps').textContent = item.episode || 'EPS';
+
+            document.getElementById('deletePreviewGenre').textContent = item.genre || 'Anime';
+
+            openModal('deleteConfirmModal');
+
+        };
+
+        window.executeDeleteVideo = function() {
+
+            if (!pendingDeleteId) return;
+
+            const idx = videos.findIndex(v => v.id === pendingDeleteId);
+
+            if (idx > -1) {
+
+                lastDeletedVideo = { item: videos[idx], index: idx };
+
+                videos.splice(idx, 1);
+
+                saveData();
+
+                renderUserContentTable();
+
+                renderGrid();
+
+                renderGenres();
+
+                showDeleteToast();
+
+            }
+
+            closeModal('deleteConfirmModal');
+
+            pendingDeleteId = null;
+
+        };
+
+        function showDeleteToast() {
+
+            const toast = document.getElementById('deleteToast');
+
+            if (!toast) return;
+
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+
+            
+
+            if (deleteTimeoutId) clearTimeout(deleteTimeoutId);
+
+            deleteTimeoutId = setTimeout(() => {
+
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+
+                // File video baru dihapus setelah masa undo habis
+
+                if (lastDeletedVideo) {
+
+                    deleteVideoAssets(lastDeletedVideo.item);
+
+                    lastDeletedVideo = null;
+
+                }
+
+            }, 5000);
+
+        }
+
+        window.undoDeleteVideo = function() {
+
+            if (!lastDeletedVideo) return;
+
+            videos.splice(lastDeletedVideo.index, 0, lastDeletedVideo.item);
+
+            saveData();
+
+            renderUserContentTable();
+
+            renderGrid();
+
+            renderGenres();
+
+            
+
+            const toast = document.getElementById('deleteToast');
+
+            if (toast) toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+
+            lastDeletedVideo = null;
+
+        };
+
+        // Window load initialization
+
+        window.onload = async function() {
+
+            await initData();
+
+            if (typeof restoreAdminSession === 'function') restoreAdminSession();
+
+            renderGrid();
+
+            renderGenres();
+
+            updateStorageStatusUI();
+
+        };
+
+    </script>
+
+</body>
+
+</html>
